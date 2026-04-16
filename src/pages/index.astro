@@ -1,0 +1,756 @@
+---
+import Layout  from '../layouts/Layout.astro';
+import Navbar  from '../components/Navbar.astro';
+import Footer  from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const latestPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+const focusAreas = [
+  {
+    title: 'Sofalizing',
+    desc: 'Interacting with others online from the comfort of home rather than meeting face-to-face — a post-pandemic behavioral shift among emerging adults.',
+    img: '/images/track-sofalizing.png',
+    pubLink: '/publications#sofalizing',
+  },
+  {
+    title: 'Sharenting',
+    desc: 'Parents publicly sharing information and images of their children on social media — exploring the privacy risks and psychological drivers behind the behaviour.',
+    img: '/images/Parent and Child Image.png',
+    pubLink: '/publications#sharenting',
+  },
+  {
+    title: 'Phubbing',
+    desc: 'Ignoring in-person conversation by focusing on a mobile phone — examining its structural determinants and its impact on interpersonal relationships.',
+    img: '/images/track-phubbing.png',
+    pubLink: '/publications#phubbing',
+  },
+  {
+    title: 'Social Media Addiction',
+    desc: 'Problematic social media use linked to dark triad traits, Big Five personality, cyberbullying perpetration, and mental health outcomes in university students.',
+    img: '/images/track-social-media-addiction.png',
+    pubLink: '/publications#social-media-addiction',
+  },
+];
+---
+
+<Layout
+  title="Doç. Dr. Şule Betül Tosuntaş — Academic Portfolio"
+  description="Associate Professor of Educational Sciences at Bursa Uludağ Üniversitesi researching digital behavior, social media addiction, phubbing, sofalizing, and sharenting."
+>
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[100] px-4 py-2 bg-[#000000] text-white font-semibold text-sm"
+  >
+    Skip to main content
+  </a>
+
+  <Navbar />
+
+  <main id="main-content">
+
+    <!-- ─── Hero ──────────────────────────────────────────────────────────── -->
+    <section
+      class="relative bg-[#F4F4F4] border-b border-[#F4F4F4]"
+      aria-labelledby="hero-heading"
+    >
+      <div
+        class="absolute inset-0 bg-[linear-gradient(#F4F4F4_1px,transparent_1px),linear-gradient(90deg,#F4F4F4_1px,transparent_1px)] bg-[size:48px_48px] opacity-40 pointer-events-none"
+        aria-hidden="true"
+      ></div>
+
+      <div class="relative max-w-2xl mx-auto px-6 py-24 lg:py-32 flex flex-col items-center text-center">
+
+        <!-- Profile photo -->
+        <div class="mb-8">
+          <img
+            src="/images/sule.png"
+            alt="Şule Betül Tosuntaş"
+            class="hero-avatar-photo"
+          />
+        </div>
+
+        <!-- Greeting -->
+        <h1
+          id="hero-heading"
+          class="font-display font-700 text-4xl sm:text-5xl text-[#000000] leading-tight mb-3"
+        >
+          Hey, I'm Şule 👋
+        </h1>
+
+        <!-- Title -->
+        <p class="text-base sm:text-lg text-[#949494] mb-10 leading-relaxed">
+          Associate Professor of Educational Sciences at<br class="hidden sm:block" />
+          Bursa Uludağ Üniversitesi
+        </p>
+
+
+      </div>
+    </section>
+
+    <!-- ─── Welcome ─────────────────────────────────────────────────────── -->
+    <section class="py-20 bg-white border-b border-[#F4F4F4]">
+      <div class="max-w-3xl mx-auto px-6 text-center">
+        <p class="text-xs font-semibold uppercase tracking-widest text-[#000000] mb-6">Welcome</p>
+        <p class="welcome-typewriter font-display text-xl sm:text-2xl text-[#000000] leading-relaxed"></p>
+      </div>
+    </section>
+
+    <!-- ─── Research Focus Areas ────────────────────────────────────────── -->
+    <section id="research" class="bg-[#F4F4F4] border-t border-[#F4F4F4]" aria-labelledby="research-heading">
+
+      <!-- Heading -->
+      <div class="max-w-6xl mx-auto px-6 pt-20 pb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-widest text-[#949494] mb-3 block">Research focus areas</span>
+          <h2 id="research-heading" class="font-display font-800 text-4xl sm:text-5xl text-[#000000] leading-tight">
+            Investigating digital<br />behaviour.
+          </h2>
+        </div>
+        <a
+          href="/publications"
+          class="shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-[#000000] text-white font-semibold text-sm hover:bg-[#2F2F2F] transition-colors duration-200 min-h-[44px]"
+        >
+          Browse all publications
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Full-width cards -->
+      <div class="max-w-6xl mx-auto px-6 pb-20 grid gap-px bg-[#F4F4F4]">
+        {focusAreas.map(({ title, desc, img, pubLink }) => (
+          <a
+            href={pubLink}
+            class="research-card group"
+            aria-label={`Research track: ${title}`}
+          >
+            <!-- Photo -->
+            <img src={img} alt={title} class="research-card-img" loading="lazy" />
+
+            <!-- Dot grid overlay -->
+            <div class="research-card-dots"></div>
+
+            <!-- Gradient -->
+            <div class="research-card-gradient"></div>
+
+            <!-- Text -->
+            <div class="research-card-body">
+              <span class="research-card-label">Research Track</span>
+              <h3 class="research-card-title">{title}</h3>
+              <p class="research-card-desc">{desc}</p>
+              <span class="research-card-cta">
+                View publications
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M1.5 6h9M7 2.5l3.5 3.5L7 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ─── Featured Publications ───────────────────────────────────── -->
+    <section id="featured-publications" class="bg-white border-t border-[#F4F4F4]" aria-labelledby="pubs-heading">
+
+      <!-- Heading row -->
+      <div class="max-w-6xl mx-auto px-6 pt-20 pb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-widest text-[#949494] mb-3 block">Recent &amp; Featured Publications</span>
+          <h2 id="pubs-heading" class="font-display font-800 text-4xl sm:text-5xl text-[#000000] leading-tight">
+            Latest academic<br />publications.
+          </h2>
+        </div>
+        <a
+          href="/publications"
+          class="shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-[#000000] text-white font-semibold text-sm hover:bg-[#2F2F2F] transition-colors duration-200 min-h-[44px]"
+        >
+          View all 90+ publications
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Publication list -->
+      <div class="max-w-6xl mx-auto px-6 pb-20 flex flex-col divide-y divide-[#F4F4F4]">
+
+        <!-- Item 1 -->
+        <article class="pub-item group">
+          <div class="pub-index" aria-hidden="true">01</div>
+          <div class="pub-body">
+            <div class="pub-meta-row">
+              <span class="pub-type-badge pub-type-article">Journal Article</span>
+              <span class="pub-year">2024</span>
+            </div>
+            <h3 class="pub-title">
+              Sharenting: A systematic review of the empirical literature
+            </h3>
+            <p class="pub-journal">Journal of Family Theory &amp; Review</p>
+          </div>
+          <a
+            href="/publications#sharenting"
+            class="pub-arrow"
+            aria-label="View sharenting publication"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <!-- Item 2 -->
+        <article class="pub-item group">
+          <div class="pub-index" aria-hidden="true">02</div>
+          <div class="pub-body">
+            <div class="pub-meta-row">
+              <span class="pub-type-badge pub-type-article">Journal Article</span>
+              <span class="pub-year">2024</span>
+            </div>
+            <h3 class="pub-title">
+              Sofalizing and its relationship with social media addiction and psychosocial factors
+            </h3>
+            <p class="pub-journal">Social Science Journal</p>
+          </div>
+          <a
+            href="/publications#sofalizing"
+            class="pub-arrow"
+            aria-label="View sofalizing publication"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <!-- Item 3 — Book -->
+        <article class="pub-item group">
+          <div class="pub-index" aria-hidden="true">03</div>
+          <div class="pub-body">
+            <div class="pub-meta-row">
+              <span class="pub-type-badge pub-type-book">Book</span>
+              <span class="pub-year">2020</span>
+            </div>
+            <h3 class="pub-title">
+              Fen Öğretim Programları
+            </h3>
+            <p class="pub-journal">Co-authored book on science education curricula</p>
+          </div>
+          <a
+            href="/publications"
+            class="pub-arrow"
+            aria-label="View book publication"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── Latest from the Blog ──────────────────────────────────── -->
+    {latestPosts.length > 0 && (
+      <section class="bg-[#F4F4F4] border-t border-[#F4F4F4]" aria-labelledby="blog-heading">
+        <div class="max-w-6xl mx-auto px-6 pt-20 pb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-[#949494] mb-3 block">From the blog</span>
+            <h2 id="blog-heading" class="font-display font-800 text-4xl sm:text-5xl text-[#000000] leading-tight">
+              Latest writing.
+            </h2>
+          </div>
+          <a
+            href="/blog"
+            class="shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-[#000000] text-white font-semibold text-sm hover:bg-[#2F2F2F] transition-colors duration-200 min-h-[44px]"
+          >
+            View all posts
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-6 pb-20 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#F4F4F4]">
+          {latestPosts.map((post) => (
+            <a
+              href={`/blog/${post.id}`}
+              class="blog-card group"
+              aria-label={post.data.title}
+            >
+              <!-- Image -->
+              <div class="blog-card-img-wrap">
+                {post.data.image ? (
+                  <img
+                    src={post.data.image}
+                    alt={post.data.title}
+                    class="blog-card-img"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="blog-card-img-placeholder" aria-hidden="true"></div>
+                )}
+                <div class="blog-card-dots" aria-hidden="true"></div>
+              </div>
+
+              <!-- Body -->
+              <div class="flex flex-col gap-3 p-6 flex-1">
+                <time
+                  datetime={post.data.date.toISOString()}
+                  class="text-xs font-semibold text-[#949494] tabular-nums"
+                >
+                  {formatDate(post.data.date)}
+                </time>
+                <h3 class="font-display font-700 text-base text-[#000000] leading-snug flex-1 group-hover:text-[#2F2F2F] transition-colors duration-200">
+                  {post.data.title}
+                </h3>
+                <p class="text-sm text-[#949494] leading-relaxed line-clamp-2">
+                  {post.data.description}
+                </p>
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5">
+                    {post.data.tags.slice(0, 2).map((tag) => (
+                      <span class="blog-card-tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+                <span class="blog-card-cta">
+                  Read post
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M1.5 6h9M7 2.5l3.5 3.5L7 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero photo ───────────────────────────────────────────────── */
+  .hero-avatar-photo {
+    width: 192px;
+    height: auto;
+  }
+
+  /* ── Welcome typewriter ───────────────────────────────────────── */
+  .welcome-typewriter::after {
+    content: '|';
+    display: inline-block;
+    margin-left: 2px;
+    color: #000000;
+    animation: blink 0.75s step-end infinite;
+  }
+  .welcome-typewriter.done::after {
+    display: none;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  /* ── Research grid cards ──────────────────────────────────────── */
+  .research-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    background: #000000;
+  }
+
+  .research-card-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    opacity: 0.75;
+  }
+
+  .research-card:hover .research-card-img {
+    transform: scale(1.04);
+    opacity: 0.55;
+  }
+
+  /* Dot grid overlay */
+  .research-card-dots {
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  /* Dark gradient from bottom */
+  .research-card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 55%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* Text body pinned to bottom */
+  .research-card-body {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .research-card-label {
+    font-family: var(--font-family-display);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .research-card-title {
+    font-family: var(--font-family-display);
+    font-weight: 800;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+  }
+
+  .research-card-desc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+    max-width: 36ch;
+    display: none;
+  }
+
+  .research-card:hover .research-card-desc {
+    display: block;
+  }
+
+  .research-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    margin-top: 0.25rem;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .research-card:hover .research-card-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Publication list ────────────────────────────────────────── */
+  .pub-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.75rem 0;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+  }
+
+  .pub-index {
+    font-family: var(--font-family-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #F4F4F4;
+    min-width: 2rem;
+    flex-shrink: 0;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+
+  .group:hover .pub-index {
+    color: #949494;
+  }
+
+  .pub-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .pub-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pub-type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .pub-type-article {
+    color: #000000;
+    border-color: #000000;
+    background: transparent;
+  }
+
+  .pub-type-book {
+    color: #ffffff;
+    border-color: #000000;
+    background: #000000;
+  }
+
+  .pub-year {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #949494;
+  }
+
+  .pub-title {
+    font-family: var(--font-family-display);
+    font-weight: 700;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: #000000;
+    line-height: 1.35;
+    transition: color 0.15s ease;
+  }
+
+  .group:hover .pub-title {
+    color: #2F2F2F;
+  }
+
+  .pub-journal {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #949494;
+  }
+
+  .pub-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: #F4F4F4;
+    transition: color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+  }
+
+  .group:hover .pub-arrow {
+    color: #000000;
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 639px) {
+    .pub-index { display: none; }
+    .pub-item { gap: 1rem; }
+    .pub-title { font-size: 0.95rem; }
+  }
+
+  /* ── Blog cards ──────────────────────────────────────────────── */
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+  }
+
+  .blog-card:hover {
+    background: #F4F4F4;
+  }
+
+  .blog-card-img-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: #F4F4F4;
+  }
+
+  .blog-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 0.9;
+  }
+
+  .blog-card:hover .blog-card-img {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+
+  .blog-card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #F4F4F4 0%, #F4F4F4 100%);
+  }
+
+  .blog-card-dots {
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  .blog-card-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #949494;
+    background: #F4F4F4;
+    border: 1px solid #F4F4F4;
+  }
+
+  .blog-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #000000;
+    margin-top: 0.5rem;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .blog-card:hover .blog-card-cta {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ── Mobile: stacked layout (photo on top, text below) ──────── */
+  @media (max-width: 639px) {
+    .research-card {
+      min-height: unset;
+      background: #ffffff;
+    }
+
+    .research-card-img {
+      position: static;
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      opacity: 1;
+      transform: none !important;
+    }
+
+    .research-card-dots,
+    .research-card-gradient {
+      display: none;
+    }
+
+    .research-card-body {
+      position: static;
+      padding: 1rem 1.25rem 1.25rem;
+      background: #ffffff;
+    }
+
+    .research-card-label {
+      color: #949494;
+    }
+
+    .research-card-title {
+      font-size: 1.25rem;
+      color: #000000;
+    }
+
+    .research-card-desc {
+      display: block;
+      color: #949494;
+    }
+
+    .research-card-cta {
+      opacity: 1;
+      transform: none;
+      color: #000000;
+    }
+  }
+</style>
+
+<script>
+  const message =
+    "Welcome to my academic portfolio. I'm Şule Betül Tosuntaş — an Associate Professor of Educational Sciences at Bursa Uludağ Üniversitesi. My research explores how digital technologies shape human behaviour, focusing on Social Media Addiction, Phubbing, Sofalizing, and Sharenting. I'm glad you're here.";
+
+  const el = document.querySelector('.welcome-typewriter') as HTMLElement | null;
+  if (el) {
+    let i = 0;
+    const speed = 28;
+    function type() {
+      if (i < message.length) {
+        el!.textContent = message.slice(0, ++i);
+        setTimeout(type, speed);
+      } else {
+        el!.classList.add('done');
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          type();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+  }
+</script>
+
+<script>
+  import { animate, inView } from 'motion';
+
+  // Fade-up each research card when it enters the viewport
+  inView('.research-card', ({ target }) => {
+    animate(target, { opacity: [0, 1], y: [32, 0] }, { duration: 0.55, easing: [0.22, 1, 0.36, 1] });
+  }, { amount: 0.15 });
+
+  // Slide-in publication rows
+  inView('.pub-item', ({ target }) => {
+    animate(target, { opacity: [0, 1], x: [-24, 0] }, { duration: 0.45, easing: [0.22, 1, 0.36, 1] });
+  }, { amount: 0.3 });
+
+  // Fade-up blog cards with staggered delay
+  const cards = document.querySelectorAll('.blog-card');
+  cards.forEach((card, i) => {
+    inView(card, ({ target }) => {
+      animate(target, { opacity: [0, 1], y: [24, 0] }, { duration: 0.5, delay: i * 0.08, easing: [0.22, 1, 0.36, 1] });
+    }, { amount: 0.2 });
+  });
+</script>

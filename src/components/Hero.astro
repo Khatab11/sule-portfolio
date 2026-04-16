@@ -1,0 +1,74 @@
+---
+---
+
+<section
+  class="relative min-h-[calc(100vh-4rem)] flex items-center bg-[#F9FAFB]"
+  aria-labelledby="hero-heading"
+>
+  <!-- Background grid decoration -->
+  <div class="absolute inset-0 bg-[linear-gradient(#E5E7EB_1px,transparent_1px),linear-gradient(90deg,#E5E7EB_1px,transparent_1px)] bg-[size:48px_48px] opacity-40 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-6xl mx-auto px-6 py-24 lg:py-32 grid lg:grid-cols-2 gap-12 items-center">
+    <!-- Text column -->
+    <div>
+      <!-- Eyebrow -->
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#DBEAFE] text-[#1D4ED8] text-xs font-semibold uppercase tracking-widest mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" aria-hidden="true"></span>
+        Available for opportunities
+      </span>
+
+      <h1
+        id="hero-heading"
+        class="font-display font-800 text-4xl sm:text-5xl lg:text-6xl text-[#111827] leading-tight mb-6"
+      >
+        Hi, I'm <span class="text-[#3B82F6]">Sule</span><br />
+        B.&nbsp;T.&nbsp;Abdellah
+      </h1>
+
+      <p class="text-lg text-[#6B7280] max-w-prose mb-8 leading-relaxed">
+        A passionate developer crafting clean, accessible, and performant digital
+        experiences. I turn ideas into polished products.
+      </p>
+
+      <!-- CTA group -->
+      <div class="flex flex-wrap gap-4">
+        <a
+          href="#projects"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#3B82F6] text-white font-semibold text-sm hover:bg-[#2563EB] transition-colors duration-200 min-h-[44px]"
+        >
+          View my work
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a
+          href="#contact"
+          class="inline-flex items-center px-6 py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#111827] font-semibold text-sm hover:border-[#3B82F6] hover:text-[#3B82F6] transition-colors duration-200 min-h-[44px]"
+        >
+          Get in touch
+        </a>
+      </div>
+    </div>
+
+    <!-- Avatar / illustration column -->
+    <div class="hidden lg:flex justify-center items-center">
+      <div class="relative">
+        <!-- Avatar placeholder ring -->
+        <div class="w-72 h-72 rounded-full bg-gradient-to-br from-[#DBEAFE] to-[#EDE9FE] flex items-center justify-center ring-4 ring-[#3B82F6]/20">
+          <div class="w-60 h-60 rounded-full bg-white flex items-center justify-center overflow-hidden">
+            <!-- Replace src with an actual photo -->
+            <svg width="96" height="96" viewBox="0 0 96 96" fill="none" aria-hidden="true">
+              <circle cx="48" cy="36" r="20" fill="#E5E7EB"/>
+              <ellipse cx="48" cy="80" rx="32" ry="20" fill="#E5E7EB"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Floating badge -->
+        <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-2 border border-[#E5E7EB]">
+          <span class="w-3 h-3 rounded-full bg-[#16A34A]" aria-hidden="true"></span>
+          <span class="text-sm font-semibold text-[#111827]">Open to work</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

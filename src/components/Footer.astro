@@ -1,0 +1,40 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-[#000000] text-[#949494]" role="contentinfo">
+  <div class="max-w-6xl mx-auto px-6 py-10">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+      <div>
+        <a href="/" aria-label="Home" class="inline-flex items-center mb-1">
+          <img
+            src="/images/logo.svg"
+            alt="Doç. Dr. Şule Betül Tosuntaş"
+            width="160"
+            height="48"
+            class="h-9 w-auto object-contain brightness-0 invert"
+          />
+        </a>
+        <p class="text-xs">Bursa Uludağ Üniversitesi · Eğitim Fakültesi</p>
+      </div>
+
+      <nav aria-label="Footer navigation">
+        <ul class="flex flex-wrap justify-center gap-6 list-none p-0 m-0">
+          {['Home', 'CV', 'Publications', 'Contact'].map(item => (
+            <li>
+              <a
+                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                class="text-sm hover:text-white transition-colors duration-200"
+              >
+                {item}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <p class="text-xs">&copy; {year} Şule Betül Tosuntaş</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,120 @@
+---
+const projects = [
+  {
+    title: 'Project Alpha',
+    description:
+      'A scalable web application built with modern technologies, featuring real-time data updates and a clean, intuitive UI.',
+    tags: ['React', 'Node.js', 'PostgreSQL'],
+    link: '#',
+    repo: '#',
+    featured: true,
+  },
+  {
+    title: 'Project Beta',
+    description:
+      'An e-commerce platform with seamless payment integration, inventory management, and an optimised checkout flow.',
+    tags: ['Next.js', 'Stripe', 'MongoDB'],
+    link: '#',
+    repo: '#',
+    featured: false,
+  },
+  {
+    title: 'Project Gamma',
+    description:
+      'A mobile-first dashboard for monitoring analytics, with interactive charts and role-based access control.',
+    tags: ['Vue', 'D3.js', 'Firebase'],
+    link: '#',
+    repo: '#',
+    featured: false,
+  },
+];
+---
+
+<section
+  id="projects"
+  class="py-24 bg-[#F9FAFB]"
+  aria-labelledby="projects-heading"
+>
+  <div class="max-w-6xl mx-auto px-6">
+    <!-- Section header -->
+    <div class="text-center mb-16">
+      <span class="text-xs font-semibold uppercase tracking-widest text-[#3B82F6] mb-3 block">
+        Portfolio
+      </span>
+      <h2
+        id="projects-heading"
+        class="font-display font-700 text-3xl sm:text-4xl text-[#111827] mb-4"
+      >
+        Selected projects
+      </h2>
+      <p class="text-[#6B7280] max-w-xl mx-auto">
+        A curated selection of work I've built — from early-stage products to enterprise features.
+      </p>
+    </div>
+
+    <!-- Cards grid -->
+    <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 list-none p-0">
+      {projects.map(({ title, description, tags, link, repo, featured }) => (
+        <li class={`group relative bg-white rounded-2xl border ${featured ? 'border-[#3B82F6]/40 ring-1 ring-[#3B82F6]/20' : 'border-[#E5E7EB]'} p-6 flex flex-col hover:shadow-lg transition-shadow duration-200`}>
+          {featured && (
+            <span class="absolute top-4 right-4 px-2 py-0.5 rounded-full bg-[#DBEAFE] text-[#1D4ED8] text-[10px] font-semibold uppercase tracking-widest">
+              Featured
+            </span>
+          )}
+
+          <!-- Icon placeholder -->
+          <div class="w-12 h-12 rounded-xl bg-[#F9FAFB] border border-[#E5E7EB] flex items-center justify-center mb-5">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" fill="#DBEAFE"/>
+              <rect x="12" y="3" width="7" height="7" rx="1.5" fill="#EDE9FE"/>
+              <rect x="3" y="12" width="7" height="7" rx="1.5" fill="#EDE9FE"/>
+              <rect x="12" y="12" width="7" height="7" rx="1.5" fill="#DBEAFE"/>
+            </svg>
+          </div>
+
+          <h3 class="font-display font-600 text-lg text-[#111827] mb-2">{title}</h3>
+          <p class="text-sm text-[#6B7280] leading-relaxed flex-1 mb-5">{description}</p>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-2 mb-6">
+            {tags.map(tag => (
+              <span class="px-2.5 py-1 rounded-full bg-[#F3F4F6] text-[#374151] text-xs font-medium">
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center gap-4 mt-auto pt-4 border-t border-[#F3F4F6]">
+            <a
+              href={link}
+              class="flex items-center gap-1.5 text-sm font-semibold text-[#3B82F6] hover:text-[#2563EB] transition-colors duration-200"
+              aria-label={`Live demo of ${title}`}
+            >
+              Live demo
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a
+              href={repo}
+              class="flex items-center gap-1.5 text-sm font-medium text-[#6B7280] hover:text-[#111827] transition-colors duration-200"
+              aria-label={`Source code of ${title}`}
+            >
+              GitHub
+            </a>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <div class="text-center mt-12">
+      <a
+        href="#"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#111827] font-semibold text-sm hover:border-[#3B82F6] hover:text-[#3B82F6] transition-colors duration-200 min-h-[44px]"
+      >
+        View all projects
+      </a>
+    </div>
+  </div>
+</section>

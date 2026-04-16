@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EDE9FE"/>
+      <stop offset="100%" style="stop-color:#DDD6FE"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- Table -->
+  <rect x="100" y="260" width="400" height="20" rx="6" fill="#C4B5FD"/>
+  <rect x="140" y="278" width="20" height="60" rx="4" fill="#C4B5FD"/>
+  <rect x="440" y="278" width="20" height="60" rx="4" fill="#C4B5FD"/>
+  <!-- Person 1 - looking at phone -->
+  <circle cx="180" cy="160" r="34" fill="#5B21B6"/>
+  <rect x="150" y="192" width="60" height="70" rx="10" fill="#5B21B6"/>
+  <!-- Phone in hand -->
+  <rect x="198" y="210" width="34" height="56" rx="6" fill="#111827"/>
+  <rect x="203" y="216" width="24" height="40" rx="3" fill="#8B5CF6" opacity="0.6"/>
+  <!-- Down-looking eyes indicator -->
+  <path d="M164 155 Q172 162 180 155" stroke="#EDE9FE" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M182 155 Q190 162 198 155" stroke="#EDE9FE" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Person 2 - looking across, ignored -->
+  <circle cx="420" cy="160" r="34" fill="#7C3AED"/>
+  <rect x="390" y="192" width="60" height="70" rx="10" fill="#7C3AED"/>
+  <!-- Looking left with speech bubble -->
+  <ellipse cx="388" cy="155" rx="5" ry="6" fill="#EDE9FE"/>
+  <ellipse cx="406" cy="155" rx="5" ry="6" fill="#EDE9FE"/>
+  <!-- Speech bubble -->
+  <rect x="430" y="90" width="110" height="44" rx="12" fill="white" stroke="#C4B5FD" stroke-width="2"/>
+  <polygon points="450,134 440,150 464,134" fill="white" stroke="#C4B5FD" stroke-width="2"/>
+  <circle cx="460" cy="112" r="4" fill="#C4B5FD"/>
+  <circle cx="476" cy="112" r="4" fill="#C4B5FD"/>
+  <circle cx="492" cy="112" r="4" fill="#C4B5FD"/>
+  <!-- Label -->
+  <text x="300" y="360" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="600" fill="#5B21B6">Phubbing</text>
+  <text x="300" y="382" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#6D28D9">Add your photo to /public/images/phubbing.jpg</text>
+</svg>

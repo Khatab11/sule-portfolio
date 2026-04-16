@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7"/>
+      <stop offset="100%" style="stop-color:#FDE68A"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- Parent figure -->
+  <circle cx="220" cy="140" r="36" fill="#92400E"/>
+  <rect x="185" y="175" width="70" height="90" rx="12" fill="#92400E"/>
+  <!-- Child figure -->
+  <circle cx="340" cy="165" r="26" fill="#D97706"/>
+  <rect x="315" y="190" width="50" height="65" rx="10" fill="#D97706"/>
+  <!-- Phone being held up -->
+  <rect x="255" y="120" width="52" height="82" rx="8" fill="#111827"/>
+  <rect x="261" y="128" width="40" height="60" rx="4" fill="#3B82F6" opacity="0.5"/>
+  <!-- Camera icon on phone -->
+  <circle cx="281" cy="158" r="10" fill="#FEF3C7" opacity="0.8"/>
+  <circle cx="281" cy="158" r="6" fill="#D97706"/>
+  <!-- Share / upload arrow -->
+  <path d="M420 120 L420 80 M420 80 L405 95 M420 80 L435 95" stroke="#D97706" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="400" y="100" width="40" height="50" rx="6" fill="none" stroke="#D97706" stroke-width="3"/>
+  <!-- Social icons floating -->
+  <circle cx="480" cy="80" r="18" fill="#4267B2" opacity="0.7"/>
+  <text x="480" y="86" text-anchor="middle" font-family="sans-serif" font-size="14" fill="white" font-weight="bold">f</text>
+  <circle cx="510" cy="120" r="14" fill="#E1306C" opacity="0.7"/>
+  <circle cx="510" cy="120" r="7" fill="none" stroke="white" stroke-width="2"/>
+  <!-- Label -->
+  <text x="300" y="360" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="600" fill="#92400E">Sharenting</text>
+  <text x="300" y="382" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#B45309">Add your photo to /public/images/sharenting.jpg</text>
+</svg>

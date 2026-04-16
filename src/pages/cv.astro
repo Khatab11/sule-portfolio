@@ -1,0 +1,688 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const education = [
+  {
+    degree: 'Post-Doctoral Research',
+    institution: 'Nottingham Trent University',
+    department: 'School of Social Sciences, Psychology Department, UK',
+    period: '2022 – 2023',
+    thesis: null,
+    logo: '/images/Nottingham Trent University.png', initials: 'NTU',
+  },
+  {
+    degree: 'Ph.D. in Curriculum and Instruction',
+    institution: 'Eskişehir Osmangazi University',
+    department: 'Educational Sciences Institute, Turkey',
+    period: '2013 – 2017',
+    thesis: 'Factors affecting teachers\' use of interactive whiteboards and their effect on teacher performance.',
+    logo: '/images/logo-ogu.jpg', initials: 'OGÜ',
+  },
+  {
+    degree: 'B.A. in Sociology',
+    institution: 'Anadolu University',
+    department: 'Open Education Faculty, Turkey',
+    period: '2016 – 2020',
+    thesis: null,
+    logo: '/images/Anadolu University Logo.jpeg', initials: 'AU',
+  },
+  {
+    degree: 'M.A. in Curriculum and Instruction',
+    institution: 'Bursa Uludağ Üniversitesi',
+    department: 'Educational Sciences Institute, Turkey',
+    period: '2012 – 2013',
+    thesis: 'Evaluation of teaching methods used by instructors in the Educational Sciences department.',
+    logo: '/images/logo-buu.png', initials: 'BUÜ',
+  },
+  {
+    degree: 'B.A. in Computer Education and Instructional Technology',
+    institution: 'Eskişehir Osmangazi University',
+    department: 'Faculty of Education, Turkey',
+    period: '2006 – 2010',
+    thesis: null,
+    logo: '/images/logo-ogu.jpg', initials: 'OGÜ',
+  },
+];
+
+const appointments = [
+  { role: 'Associate Professor (Doç. Dr.)',       institution: 'Bursa Uludağ Üniversitesi',         period: '2021 – Present',      current: true,  logo: '/images/logo-buu.png',    initials: 'BUÜ' },
+  { role: 'Postdoctoral Researcher',               institution: 'Nottingham Trent University, UK',   period: '2022 – 2023',         current: false, logo: '/images/Nottingham Trent University.png', initials: 'NTU' },
+  { role: 'Assistant Professor (Dr. Öğr. Üyesi)', institution: 'Bursa Uludağ Üniversitesi',         period: '2019 – 2021',         current: false, logo: '/images/logo-buu.png',    initials: 'BUÜ' },
+  { role: 'Research Assistant (Dr.)',              institution: 'Bursa Uludağ Üniversitesi',         period: '2018 – 2019',         current: false, logo: '/images/logo-buu.png',    initials: 'BUÜ' },
+  { role: 'Visiting Scholar',                      institution: 'Cardiff Metropolitan University, UK', period: 'Feb 2017 – Aug 2017', current: false, logo: '/images/Cardiff Metropolitan University.jpg', initials: 'CMU' },
+  { role: 'Research Assistant',                    institution: 'Eskişehir Osmangazi University',    period: '2013 – 2017',         current: false, logo: '/images/logo-ogu.jpg', initials: 'OGÜ' },
+  { role: 'Research Assistant',                    institution: 'Bursa Uludağ Üniversitesi',         period: '2011 – 2013',         current: false, logo: '/images/logo-buu.png',    initials: 'BUÜ' },
+];
+
+const adminRoles = [
+  { role: 'BAP (Scientific Research Projects) Commission Member', institution: 'Bursa Uludağ Üniversitesi', period: '2023 – Present', logo: '/images/logo-buu.png', initials: 'BUÜ' },
+  { role: 'Faculty Board Member', institution: 'Bursa Uludağ Üniversitesi, Faculty of Education', period: '2020 – 2021', logo: '/images/logo-buu.png', initials: 'BUÜ' },
+  { role: 'Department Academic Incentive Evaluation Commission Member', institution: 'Bursa Uludağ Üniversitesi', period: '2019 – 2021', logo: '/images/logo-buu.png', initials: 'BUÜ' },
+];
+
+const universityAwards = [
+  {
+    title: 'Highly Cited Researcher Award',
+    year: '2024 / 2025',
+    desc: 'Awarded by the Rector of Bursa Uludağ Üniversitesi for publishing in the top 10% most highly cited journals in the Web of Science database.',
+  },
+];
+
+const tubitakAwards = [
+  { year: 'March 2022',    topic: 'Childhood Emotional Abuse and Cyberbullying Perpetration' },
+  { year: 'October 2021',  topic: 'Compensatory Usage of the Internet: The Case of Mukbang Watching on YouTube' },
+  { year: 'November 2020', topic: 'Trait Emotional Intelligence and Internet Gaming Disorder Among Gamers' },
+  { year: 'June 2020',     topic: 'The Mediating Role of Self/Everyday Creativity and Depression… & Uses and Gratifications of Problematic Social Media Use Among University Students' },
+  { year: 'January 2020',  topic: 'Analyzing the Links Between Problematic Social Media Use, Dark Triad Traits, and Self-esteem' },
+  { year: 'September 2019', topic: 'Dark personality traits and problematic smartphone use' },
+  { year: 'July 2018',     topic: 'Cyberbullying perpetration among undergraduates' },
+  { year: 'April 2015',    topic: 'The factors affecting acceptance and use of interactive whiteboard within the scope of FATIH project' },
+];
+
+const tubitakFellowships = [
+  { period: '2022 – 2023', program: '2219 Postdoctoral Research Fellowship Abroad' },
+  { period: '2017',        program: '2214-A International Research Fellowship Program' },
+  { period: '2013 – 2017', program: '2211-E Direct Domestic PhD Scholarship Program' },
+  { period: '2010 – 2012', program: '2228-A Graduate Scholarship Program' },
+];
+
+const courses = [
+  { level: 'Graduate',     name: 'Instructional Design (Öğretim Tasarımı)' },
+  { level: 'Undergraduate', name: 'Technology Addiction (Teknoloji Bağımlılığı)' },
+];
+
+const taught = [
+  'Scientific Research Techniques and Research Ethics (Graduate)',
+  'Current Issues in Education (Graduate)',
+  'Instructional Technologies',
+  'Measurement and Evaluation',
+  'Curriculum Development in Education',
+];
+
+const pubsDigital = [
+  {
+    ref: 'Tosuntaş, Ş. B., & Griffiths, M. D. (2024).',
+    title: 'Sharenting: A systematic review of the empirical literature.',
+    journal: 'Journal of Family Theory & Review',
+    detail: '16(3), 525–562.',
+  },
+  {
+    ref: 'Tosuntaş, Ş. B., Karadağ, E., Emirtekin, E., Kircaburun, K., & Griffiths, M. D. (2024).',
+    title: 'Sofalizing and its relationship with social media addiction and psychosocial factors: A new phenomenon among emerging adults.',
+    journal: 'Social Science Journal',
+    detail: '61(2), 378–390.',
+  },
+  {
+    ref: 'Kircaburun, K., Jonason, P., Griffiths, M. D., Aslanargun, E., Emirtekin, E., Tosuntaş, Ş. B., et al. (2021).',
+    title: 'Childhood Emotional Abuse and Cyberbullying Perpetration: The Role of Dark Personality Traits.',
+    journal: 'Journal of Interpersonal Violence',
+    detail: '36(21–22).',
+  },
+  {
+    ref: 'Kırcaburun, K., Alhabash, S., Tosuntaş, Ş. B., & Griffiths, M. D. (2020).',
+    title: 'Uses and Gratifications of Problematic Social Media Use Among University Students: a Simultaneous Examination of the Big Five of Personality Traits, Social Media Platforms, and Social Media Use Motives.',
+    journal: 'International Journal of Mental Health and Addiction',
+    detail: '18(3), 525–547.',
+  },
+  {
+    ref: 'Karadağ, E., Tosuntaş, Ş. B., Erzen, E., Duru, P., Bostan, N., Sahin, B. M., et al. (2015).',
+    title: 'Determinants of phubbing, which is the sum of many virtual addictions: A structural equation model.',
+    journal: 'Journal of Behavioral Addictions',
+    detail: '4(2), 60–74.',
+  },
+];
+
+const pubsEdTech = [
+  {
+    ref: 'Tosuntaş, Ş. B., Çubukçu, Z., & Beauchamp, G. (2021).',
+    title: 'A new model for the factors that affect interactive whiteboard usage of teachers and its effect on performance.',
+    journal: 'Education and Information Technologies',
+    detail: '26(3), 3575–3592.',
+  },
+  {
+    ref: 'Tosuntaş, Ş. B., Çubukçu, Z., & İnci, T. (2019).',
+    title: 'A Holistic View to Barriers to Technology Integration in Education.',
+    journal: 'Turkish Online Journal of Qualitative Inquiry',
+    detail: '10(4), 349–371.',
+  },
+  {
+    ref: 'Tosuntaş, Ş. B., Karadağ, E., & Orhan, S. (2015).',
+    title: 'The factors affecting acceptance and use of interactive whiteboard within the scope of FATIH project: A structural equation model based on the Unified Theory of acceptance and use of technology.',
+    journal: 'Computers & Education',
+    detail: '81, 169–178.',
+  },
+];
+---
+
+<Layout
+  title="CV — Doç. Dr. Şule Betül Tosuntaş"
+  description="Full curriculum vitae of Doç. Dr. Şule Betül Tosuntaş — appointments, education, awards, teaching, and publications."
+>
+  <Navbar />
+
+  <main id="main-content">
+
+    <!-- ─── Page header ───────────────────────────────────────────────────── -->
+    <div class="relative overflow-hidden bg-[#000000]">
+
+      <!-- Full-size photo -->
+      <img
+        src="/images/cv-hero.png"
+        alt="Doç. Dr. Şule Betül Tosuntaş"
+        class="w-full block"
+      />
+
+      <!-- Dot grid overlay -->
+      <div
+        class="absolute inset-0 opacity-25 pointer-events-none"
+        style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"
+      ></div>
+
+      <!-- Dark gradient -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
+
+      <!-- Overlay content -->
+      <div class="absolute bottom-0 left-0 right-0 px-6 sm:px-12 pb-10 pt-20">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+
+          <!-- Name & title -->
+          <div>
+            <span class="text-[11px] font-semibold uppercase tracking-widest text-white/50 mb-3 block">
+              Curriculum Vitae
+            </span>
+            <h1 class="font-display font-800 text-3xl sm:text-5xl text-white leading-tight mb-2">
+              Doç. Dr. Şule Betül Tosuntaş
+            </h1>
+            <p class="text-white/60 text-sm sm:text-base">
+              Associate Professor · Department of Educational Sciences · Bursa Uludağ Üniversitesi
+            </p>
+          </div>
+
+          <!-- Stats -->
+          <div class="flex items-center gap-8 shrink-0">
+            {[
+              { value: '22',   label: 'H-index' },
+              { value: '4184', label: 'Citations' },
+              { value: '90+',  label: 'Publications' },
+            ].map(({ value, label }) => (
+              <div class="text-center">
+                <p class="font-display font-800 text-3xl sm:text-4xl text-white">{value}</p>
+                <p class="text-xs text-white/50 mt-1 uppercase tracking-widest">{label}</p>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Sticky section nav ────────────────────────────────────────────── -->
+    <div class="bg-white border-b border-[#F4F4F4] sticky top-16 z-40 overflow-x-auto">
+      <div class="max-w-6xl mx-auto px-6">
+        <nav aria-label="CV sections" id="cv-nav" class="flex gap-1 py-3 whitespace-nowrap">
+          {[
+            ['contact',      'Contact'],
+            ['education',    'Education'],
+            ['appointments', 'Appointments'],
+            ['admin',        'Admin Roles'],
+            ['awards',       'Awards'],
+            ['teaching',     'Teaching'],
+            ['publications', 'Publications'],
+          ].map(([id, label]) => (
+            <a
+              href={`#${id}`}
+              data-section={id}
+              class="cv-nav-link px-4 py-2 text-xs font-semibold text-[#949494] hover:text-[#000000] transition-colors duration-200"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-16 space-y-20">
+
+      <!-- ─── Contact ───────────────────────────────────────────────────────── -->
+      <section id="contact" class="scroll-mt-32" aria-labelledby="contact-cv-heading">
+        <h2 id="contact-cv-heading" class="cv-section-heading">
+          <span class="cv-icon bg-[#F4F4F4]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M2 4h12l-6 5-6-5Z" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M2 4v9h12V4" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Contact Information
+        </h2>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Email -->
+          <div class="bg-white border border-[#F4F4F4] p-5">
+            <p class="text-[10px] font-semibold uppercase tracking-widest text-[#949494] mb-2">Email</p>
+            <a href="mailto:sbtosuntas@uludag.edu.tr" class="text-sm font-medium text-[#000000] hover:underline break-all">
+              sbtosuntas@uludag.edu.tr
+            </a>
+          </div>
+          <!-- Phone -->
+          <div class="bg-white border border-[#F4F4F4] p-5">
+            <p class="text-[10px] font-semibold uppercase tracking-widest text-[#949494] mb-2">Phone</p>
+            <p class="text-sm font-medium text-[#000000]">+90 224 275 5031</p>
+          </div>
+          <!-- Office -->
+          <div class="bg-white border border-[#F4F4F4] p-5 sm:col-span-2">
+            <p class="text-[10px] font-semibold uppercase tracking-widest text-[#949494] mb-2">Office</p>
+            <address class="not-italic text-sm text-[#2F2F2F] leading-relaxed">
+              Eğitim Fakültesi B Blok, Eğitim Bilimleri Bölümü, Office 110.<br />
+              Görükle Kampüsü Nilüfer / BURSA, Turkey
+            </address>
+          </div>
+        </div>
+
+        <!-- Academic profiles -->
+        <div class="mt-4 bg-white border border-[#F4F4F4] p-5">
+          <p class="text-[10px] font-semibold uppercase tracking-widest text-[#949494] mb-4">Academic Profiles</p>
+          <div class="flex flex-wrap gap-3">
+            {[
+              { label: 'AVESİS Profile',  href: 'https://avesis.uludag.edu.tr/sbtosuntas' },
+              { label: 'Google Scholar · H-index 22 · 4184 citations', href: 'https://scholar.google.com' },
+              { label: 'ResearchGate',   href: 'https://www.researchgate.net' },
+              { label: 'ORCID 0000-0002-0731-6505', href: 'https://orcid.org/0000-0002-0731-6505' },
+            ].map(({ label, href }) => (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#F4F4F4] text-xs font-medium text-[#2F2F2F] hover:border-[#000000] hover:text-[#000000] transition-colors duration-200"
+              >
+                {label}
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M2 8L8 2M8 2H4M8 2v4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Education ─────────────────────────────────────────────────────── -->
+      <section id="education" class="scroll-mt-32" aria-labelledby="education-heading">
+        <h2 id="education-heading" class="cv-section-heading">
+          <span class="cv-icon bg-[#F4F4F4]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 2L1 6l7 4 7-4-7-4Z" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M4 8v4l4 2 4-2V8" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Education
+        </h2>
+
+        <div class="relative border-l-2 border-[#F4F4F4] ml-3 pl-8 space-y-8">
+          {education.map(({ degree, institution, department, period, thesis, logo, initials }) => (
+            <div class="relative">
+              <span class="absolute -left-[2.65rem] top-1.5 w-4 h-4 bg-white border-2 border-[#000000]" aria-hidden="true"></span>
+              <p class="text-[10px] font-semibold text-[#949494] uppercase tracking-widest mb-2">{period}</p>
+              <div class="flex items-start gap-3">
+                <!-- University logo -->
+                <div class="shrink-0 w-9 h-9 border border-[#F4F4F4] bg-white flex items-center justify-center overflow-hidden mt-0.5 rounded-full">
+                  <img
+                    src={logo}
+                    alt={institution}
+                    class="w-full h-full object-contain p-0.5"
+                    onerror={`this.style.display='none';this.nextElementSibling.style.display='flex';`}
+                  />
+                  <span class="text-[8px] font-bold text-[#949494] hidden items-center justify-center w-full h-full text-center leading-tight px-0.5">
+                    {initials}
+                  </span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-display font-600 text-[#000000] text-base mb-0.5">{degree}</h3>
+                  <p class="text-sm font-medium text-[#000000]">{institution}</p>
+                  <p class="text-xs text-[#949494] mt-0.5">{department}</p>
+                  {thesis && (
+                    <p class="text-xs text-[#949494] mt-2 italic border-l-2 border-[#F4F4F4] pl-3">
+                      <span class="font-semibold not-italic text-[#2F2F2F]">Thesis:</span> {thesis}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ─── Academic Appointments ────────────────────────────────────────── -->
+      <section id="appointments" class="scroll-mt-32" aria-labelledby="appointments-heading">
+        <h2 id="appointments-heading" class="cv-section-heading">
+          <span class="cv-icon bg-[#F4F4F4]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <rect x="2" y="4" width="12" height="10" stroke="#000000" stroke-width="1.5"/>
+              <path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M5 9h6M5 12h4" stroke="#000000" stroke-width="1.25" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Academic &amp; Professional Appointments
+        </h2>
+
+        <div class="space-y-3">
+          {appointments.map(({ role, institution, period, current, logo, initials }) => (
+            <div class={`flex flex-col sm:flex-row sm:items-center gap-4 p-4 border ${current ? 'bg-[#F4F4F4] border-[#949494]' : 'bg-white border-[#F4F4F4]'}`}>
+
+              <!-- University logo -->
+              <div class="shrink-0 w-10 h-10 border border-[#F4F4F4] bg-white flex items-center justify-center overflow-hidden rounded-full">
+                <img
+                  src={logo}
+                  alt={institution}
+                  class="w-full h-full object-contain p-1"
+                  onerror={`this.style.display='none';this.nextElementSibling.style.display='flex';`}
+                />
+                <span class="text-[9px] font-bold text-[#949494] hidden items-center justify-center w-full h-full text-center leading-tight px-0.5">
+                  {initials}
+                </span>
+              </div>
+
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h3 class="font-display font-600 text-[#000000] text-sm">{role}</h3>
+                  {current && (
+                    <span class="px-2 py-0.5 bg-[#F4F4F4] text-[#000000] text-[10px] font-semibold uppercase tracking-widest">
+                      Current
+                    </span>
+                  )}
+                </div>
+                <p class="text-xs text-[#949494] mt-0.5">{institution}</p>
+              </div>
+              <span class="shrink-0 text-xs font-medium text-[#949494] tabular-nums">{period}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ─── Administrative Roles ──────────────────────────────────────────── -->
+      <section id="admin" class="scroll-mt-32" aria-labelledby="admin-heading">
+        <h2 id="admin-heading" class="cv-section-heading">
+          <span class="cv-icon bg-[#F4F4F4]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="6" stroke="#000000" stroke-width="1.5"/>
+              <path d="M8 5v3l2 2" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Administrative Roles
+        </h2>
+
+        <div class="space-y-3">
+          {adminRoles.map(({ role, institution, period, logo, initials }) => (
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border border-[#F4F4F4] bg-white">
+              <!-- University logo -->
+              <div class="shrink-0 w-10 h-10 border border-[#F4F4F4] bg-white flex items-center justify-center overflow-hidden rounded-full">
+                <img
+                  src={logo}
+                  alt={institution}
+                  class="w-full h-full object-contain p-1"
+                  onerror={`this.style.display='none';this.nextElementSibling.style.display='flex';`}
+                />
+                <span class="text-[9px] font-bold text-[#949494] hidden items-center justify-center w-full h-full text-center leading-tight px-0.5">
+                  {initials}
+                </span>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-display font-600 text-[#000000] text-sm">{role}</h3>
+                <p class="text-xs text-[#949494] mt-0.5">{institution}</p>
+              </div>
+              <span class="shrink-0 text-xs font-medium text-[#949494] tabular-nums">{period}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ─── Awards & Fellowships ──────────────────────────────────────────── -->
+      <section id="awards" class="scroll-mt-32" aria-labelledby="awards-heading">
+        <h2 id="awards-heading" class="cv-section-heading">
+          <span class="cv-icon bg-[#F4F4F4]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 2l1.5 3.5L13 6l-2.5 2.5.5 3.5L8 10.5 5 12l.5-3.5L3 6l3.5-.5L8 2Z" stroke="#000000" stroke-width="1.25" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Awards &amp; Fellowships
+        </h2>
+
+        <!-- University recognition -->
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-4">University Recognitions</h3>
+        {universityAwards.map(({ title, year, desc }) => (
+          <div class="bg-[#F4F4F4] border border-[#949494] mb-8 overflow-hidden">
+            <img
+              src="/images/highly-cited-award.jpg"
+              alt={title}
+              class="w-full object-cover block"
+            />
+            <div class="p-5">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p class="font-display font-600 text-[#000000] text-sm">{title}</p>
+                  <p class="text-xs text-[#949494] mt-1 leading-relaxed max-w-xl">{desc}</p>
+                </div>
+                <span class="shrink-0 px-3 py-1 bg-[#F4F4F4] text-[#000000] text-xs font-semibold">{year}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        <!-- TÜBİTAK incentive awards -->
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-4">TÜBİTAK International Scientific Publication Incentive Awards</h3>
+        <div class="space-y-2 mb-10">
+          {tubitakAwards.map(({ year, topic }) => (
+            <div class="flex gap-4 items-start p-4 bg-white border border-[#F4F4F4]">
+              <span class="shrink-0 text-xs font-semibold text-[#000000] w-28 pt-0.5 tabular-nums">{year}</span>
+              <p class="text-sm text-[#2F2F2F] leading-relaxed italic">"{topic}"</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- TÜBİTAK fellowships -->
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-4">TÜBİTAK Fellowships</h3>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {tubitakFellowships.map(({ period, program }) => (
+            <div class="flex gap-4 items-start p-4 bg-white border border-[#F4F4F4]">
+              <span class="shrink-0 text-xs font-semibold text-[#000000] w-24 pt-0.5 tabular-nums">{period}</span>
+              <p class="text-sm text-[#2F2F2F]">{program}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ─── Teaching & Mentoring ──────────────────────────────────────────── -->
+      <section id="teaching" class="scroll-mt-32" aria-labelledby="teaching-heading">
+        <h2 id="teaching-heading" class="cv-section-heading">
+          <span class="cv-icon bg-[#F4F4F4]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="12" height="9" stroke="#000000" stroke-width="1.5"/>
+              <path d="M6 12v2M10 12v2M4 14h8" stroke="#000000" stroke-width="1.25" stroke-linecap="round"/>
+              <path d="M5 7h6M7 9.5h2" stroke="#000000" stroke-width="1.25" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Teaching &amp; Mentoring
+        </h2>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+
+          <!-- Courses designed -->
+          <div class="bg-white border border-[#F4F4F4] p-6">
+            <h3 class="font-display font-600 text-[#000000] text-sm mb-4">Courses Designed</h3>
+            <ul class="space-y-3 list-none p-0">
+              {courses.map(({ level, name }) => (
+                <li class="text-sm">
+                  <span class={`inline-block px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest mr-2 ${level === 'Graduate' ? 'bg-[#F4F4F4] text-[#000000]' : 'bg-[#F4F4F4] text-[#000000]'}`}>
+                    {level}
+                  </span>
+                  <span class="text-[#2F2F2F]">{name}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Courses taught -->
+          <div class="bg-white border border-[#F4F4F4] p-6">
+            <h3 class="font-display font-600 text-[#000000] text-sm mb-4">Selected Courses Taught</h3>
+            <ul class="space-y-2 list-none p-0">
+              {taught.map(c => (
+                <li class="flex items-start gap-2 text-sm text-[#2F2F2F]">
+                  <span class="mt-1.5 shrink-0 w-1.5 h-1.5 bg-[#000000]" aria-hidden="true"></span>
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Theses supervised -->
+          <div class="bg-white border border-[#F4F4F4] p-6">
+            <h3 class="font-display font-600 text-[#000000] text-sm mb-4">Theses Supervised</h3>
+            <div class="text-sm text-[#2F2F2F] leading-relaxed">
+              <span class="inline-block px-2 py-0.5 bg-[#F4F4F4] text-[#000000] text-[10px] font-semibold uppercase tracking-widest mb-2">
+                Master's Thesis
+              </span>
+              <p class="italic text-[#949494] leading-relaxed">
+                "Do We Trust AI As It Is? Extending The UTAUT Model to Explore the Acceptance of
+                AI-Based Recruitment Tools from the User's Perspective"
+              </p>
+              <p class="text-xs text-[#949494] mt-2">A. Aktaş · 2024</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Selected Publications ─────────────────────────────────────────── -->
+      <section id="publications" class="scroll-mt-32" aria-labelledby="publications-heading">
+        <h2 id="publications-heading" class="cv-section-heading">
+          <span class="cv-icon bg-[#F4F4F4]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <rect x="3" y="2" width="10" height="12" stroke="#000000" stroke-width="1.5"/>
+              <path d="M6 5h4M6 8h4M6 11h2" stroke="#000000" stroke-width="1.25" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Selected Publications
+        </h2>
+
+        <!-- Digital behaviours -->
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-5">Social Media Addiction &amp; Digital Psychology</h3>
+        <ol class="space-y-4 list-none p-0 mb-12">
+          {pubsDigital.map(({ ref, title, journal, detail }, i) => (
+            <li class="flex gap-5 bg-white border border-[#F4F4F4] p-6 hover:shadow-md transition-shadow duration-200">
+              <span class="shrink-0 w-7 h-7 bg-[#F4F4F4] flex items-center justify-center text-[#000000] text-xs font-bold" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div>
+                <p class="text-xs text-[#949494] mb-1">{ref}</p>
+                <p class="font-display font-600 text-sm text-[#000000] leading-snug mb-1">{title}</p>
+                <p class="text-xs text-[#000000] italic">{journal}<span class="text-[#949494] not-italic">, {detail}</span></p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <!-- Ed tech -->
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-5">Educational Technology Integration</h3>
+        <ol class="space-y-4 list-none p-0 mb-12">
+          {pubsEdTech.map(({ ref, title, journal, detail }, i) => (
+            <li class="flex gap-5 bg-white border border-[#F4F4F4] p-6 hover:shadow-md transition-shadow duration-200">
+              <span class="shrink-0 w-7 h-7 bg-[#F4F4F4] flex items-center justify-center text-[#000000] text-xs font-bold" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div>
+                <p class="text-xs text-[#949494] mb-1">{ref}</p>
+                <p class="font-display font-600 text-sm text-[#000000] leading-snug mb-1">{title}</p>
+                <p class="text-xs text-[#2F2F2F] italic">{journal}<span class="text-[#949494] not-italic">, {detail}</span></p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <!-- Books -->
+        <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-5">Books</h3>
+        <div class="bg-white border border-[#F4F4F4] p-6 flex gap-5">
+          <span class="shrink-0 w-7 h-7 bg-[#F4F4F4] flex items-center justify-center text-[#000000] text-xs font-bold" aria-hidden="true">B</span>
+          <div>
+            <p class="text-xs text-[#949494] mb-1">Anagün, S. S., Karademir, E., Çubukçu, Z., Tosuntaş, Ş. B., &amp; Kartal, M. S. (2020).</p>
+            <p class="font-display font-600 text-sm text-[#000000]">Fen Öğretim Programları</p>
+          </div>
+        </div>
+
+        <p class="mt-8 text-sm text-[#949494] text-center">
+          For a complete list of 90+ publications and current research updates, visit
+          <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" class="text-[#000000] font-medium hover:underline">Google Scholar</a>
+          or
+          <a href="https://www.researchgate.net" target="_blank" rel="noopener noreferrer" class="text-[#000000] font-medium hover:underline">ResearchGate</a>.
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .cv-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-family-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #000000;
+    margin-bottom: 1.75rem;
+  }
+  .cv-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  /* Active nav tab */
+  .cv-nav-link.active {
+    color: #000000;
+    font-weight: 800;
+  }
+</style>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('.cv-nav-link');
+  const sections = Array.from(links).map(l => document.getElementById(l.dataset.section!)).filter(Boolean) as HTMLElement[];
+
+  let scrolling = false;
+  let scrollTimer: ReturnType<typeof setTimeout>;
+
+  function setActive(id: string) {
+    links.forEach(l => l.classList.toggle('active', l.dataset.section === id));
+    const activeLink = document.querySelector<HTMLElement>(`.cv-nav-link[data-section="${id}"]`);
+    activeLink?.scrollIntoView({ block: 'nearest', inline: 'center' });
+  }
+
+  // Click: lock observer, set active, unlock after scroll settles
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      scrolling = true;
+      setActive(link.dataset.section!);
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => { scrolling = false; }, 800);
+    });
+  });
+
+  // Scroll spy — only fires when not locked by a click
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (scrolling) return;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    },
+    { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
+  );
+
+  sections.forEach(s => observer.observe(s));
+  setActive(sections[0]?.id ?? 'contact');
+</script>

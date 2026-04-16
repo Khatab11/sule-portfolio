@@ -1,0 +1,229 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<Layout
+  title="Blog — Şule Betül Tosuntaş"
+  description="Essays and reflections on digital behaviour research — sofalizing, sharenting, phubbing, and social media addiction — by Associate Professor Şule Betül Tosuntaş."
+>
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[100] px-4 py-2 bg-[#000000] text-white font-semibold text-sm"
+  >
+    Skip to main content
+  </a>
+
+  <Navbar />
+
+  <main id="main-content">
+
+    <!-- ─── Page Header ──────────────────────────────────────────────── -->
+    <section class="bg-[#F4F4F4] border-b border-[#F4F4F4] py-16 lg:py-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#949494] mb-3 block">Writing</span>
+        <h1 class="font-display font-800 text-4xl sm:text-5xl text-[#000000] leading-tight">
+          Blog
+        </h1>
+        <p class="mt-4 text-base text-[#949494] max-w-xl leading-relaxed">
+          Essays and reflections on digital behaviour, research findings, and the evolving relationship between people and technology.
+        </p>
+      </div>
+    </section>
+
+    <!-- ─── Posts ────────────────────────────────────────────────────── -->
+    <section class="py-16 bg-white" aria-labelledby="posts-heading">
+      <h2 id="posts-heading" class="sr-only">All posts</h2>
+      <div class="max-w-6xl mx-auto px-6">
+
+        {posts.length === 0 ? (
+          <p class="text-[#949494] text-sm">No posts yet. Check back soon.</p>
+        ) : (
+          <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#F4F4F4] list-none m-0 p-0">
+            {posts.map((post) => (
+              <li class="bg-white">
+                <a
+                  href={`/blog/${post.id}`}
+                  class="post-card group"
+                  aria-label={post.data.title}
+                >
+                  <!-- Image -->
+                  <div class="post-card-img-wrap">
+                    {post.data.image ? (
+                      <img
+                        src={post.data.image}
+                        alt={post.data.title}
+                        class="post-card-img"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div class="post-card-img-placeholder" aria-hidden="true"></div>
+                    )}
+                    <div class="post-card-dots" aria-hidden="true"></div>
+                  </div>
+
+                  <!-- Body -->
+                  <div class="post-card-body">
+                    <time
+                      datetime={post.data.date.toISOString()}
+                      class="text-xs font-semibold text-[#949494] tabular-nums"
+                    >
+                      {formatDate(post.data.date)}
+                    </time>
+
+                    <h2 class="post-card-title">{post.data.title}</h2>
+                    <p class="post-card-desc">{post.data.description}</p>
+
+                    {post.data.tags && post.data.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-1.5 mt-auto pt-3">
+                        {post.data.tags.slice(0, 2).map((tag) => (
+                          <span class="post-tag">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    <span class="post-card-cta">
+                      Read post
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M1.5 6h9M7 2.5l3.5 3.5L7 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    background: #ffffff;
+    transition: background-color 0.15s ease;
+  }
+
+  .post-card:hover {
+    background: #F4F4F4;
+  }
+
+  /* Image */
+  .post-card-img-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: #F4F4F4;
+  }
+
+  .post-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 0.9;
+  }
+
+  .post-card:hover .post-card-img {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+
+  .post-card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #F4F4F4 0%, #F4F4F4 100%);
+  }
+
+  .post-card-dots {
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  /* Body */
+  .post-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    flex: 1;
+  }
+
+  .post-card-title {
+    font-family: var(--font-family-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #000000;
+    line-height: 1.35;
+    margin: 0;
+    transition: color 0.15s ease;
+  }
+
+  .post-card:hover .post-card-title {
+    color: #2F2F2F;
+  }
+
+  .post-card-desc {
+    font-size: 0.82rem;
+    color: #949494;
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #949494;
+    background: #F4F4F4;
+    border: 1px solid #F4F4F4;
+  }
+
+  .post-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #000000;
+    margin-top: 0.5rem;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .post-card:hover .post-card-cta {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>

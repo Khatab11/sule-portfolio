@@ -1,0 +1,390 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function readingTime(body: string): string {
+  const words = body.trim().split(/\s+/).length;
+  const minutes = Math.max(1, Math.round(words / 200));
+  return `${minutes} min read`;
+}
+
+const estimatedReadTime = readingTime(post.body ?? '');
+---
+
+<Layout
+  title={`${post.data.title} — Şule Betül Tosuntaş`}
+  description={post.data.description}
+>
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[100] px-4 py-2 bg-[#000000] text-white font-semibold text-sm"
+  >
+    Skip to main content
+  </a>
+
+  <Navbar />
+
+  <main id="main-content">
+
+    <!-- ─── Article Header ───────────────────────────────────────────── -->
+    <header class={post.data.image ? 'post-hero-wrap' : 'border-b border-[#F4F4F4]'}>
+
+      {post.data.image ? (
+        <>
+          <!-- Full-bleed hero image -->
+          <img
+            src={post.data.image}
+            alt={post.data.title}
+            class="post-hero-img"
+          />
+          <!-- Gradient + dot overlay -->
+          <div class="post-hero-overlay" aria-hidden="true"></div>
+          <div class="post-hero-dots" aria-hidden="true"></div>
+
+          <!-- Overlaid content -->
+          <div class="post-hero-content">
+            <!-- Back link -->
+            <a
+              href="/blog"
+              class="inline-flex items-center gap-2 text-xs font-semibold text-white/70 hover:text-white uppercase tracking-widest transition-colors duration-200 mb-8"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M10.5 6h-9M5 2.5L1.5 6 5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              All posts
+            </a>
+
+            <!-- Tags -->
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-1.5 mb-5">
+                {post.data.tags.map((tag) => (
+                  <span class="post-tag post-tag--light">{tag}</span>
+                ))}
+              </div>
+            )}
+
+            <!-- Title -->
+            <h1 class="font-display font-800 text-3xl sm:text-4xl text-white leading-tight mb-5">
+              {post.data.title}
+            </h1>
+
+            <!-- Meta row -->
+            <div class="flex items-center gap-4 text-sm text-white/70">
+              <time datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date)}
+              </time>
+              <span aria-hidden="true">·</span>
+              <span>Şule Betül Tosuntaş</span>
+              <span aria-hidden="true">·</span>
+              <span>{estimatedReadTime}</span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div class="bg-[#F4F4F4] py-14 lg:py-18">
+          <div class="max-w-3xl mx-auto px-6">
+            <!-- Back link -->
+            <a
+              href="/blog"
+              class="inline-flex items-center gap-2 text-xs font-semibold text-[#949494] hover:text-[#000000] uppercase tracking-widest transition-colors duration-200 mb-8"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M10.5 6h-9M5 2.5L1.5 6 5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              All posts
+            </a>
+
+            <!-- Tags -->
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-1.5 mb-5">
+                {post.data.tags.map((tag) => (
+                  <span class="post-tag">{tag}</span>
+                ))}
+              </div>
+            )}
+
+            <!-- Title -->
+            <h1 class="font-display font-800 text-3xl sm:text-4xl text-[#000000] leading-tight mb-5">
+              {post.data.title}
+            </h1>
+
+            <!-- Meta row -->
+            <div class="flex items-center gap-4 text-sm text-[#949494]">
+              <time datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date)}
+              </time>
+              <span aria-hidden="true">·</span>
+              <span>Şule Betül Tosuntaş</span>
+              <span aria-hidden="true">·</span>
+              <span>{estimatedReadTime}</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+
+    <!-- ─── Article Body ─────────────────────────────────────────────── -->
+    <article class="py-14 bg-white">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </article>
+
+    <!-- ─── Comments (Giscus) ────────────────────────────────────────── -->
+    <!-- Setup: go to giscus.app, connect your GitHub repo, replace the data-* values below -->
+    <div class="border-t border-[#F4F4F4] bg-white py-14">
+      <div class="max-w-3xl mx-auto px-6">
+        <h2 class="font-display font-700 text-lg text-[#000000] mb-8">Discussion</h2>
+        <script
+          src="https://giscus.app/client.js"
+          data-repo="YOUR_GITHUB_USERNAME/YOUR_REPO_NAME"
+          data-repo-id="YOUR_REPO_ID"
+          data-category="Announcements"
+          data-category-id="YOUR_CATEGORY_ID"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="light"
+          data-lang="en"
+          crossorigin="anonymous"
+          async
+        ></script>
+      </div>
+    </div>
+
+    <!-- ─── Footer Nav ───────────────────────────────────────────────── -->
+    <div class="border-t border-[#F4F4F4] bg-[#F4F4F4] py-10">
+      <div class="max-w-3xl mx-auto px-6">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-[#000000] text-white font-semibold text-sm hover:bg-[#2F2F2F] transition-colors duration-200 min-h-[44px]"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M12 7H2M6 3L2 7l4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to all posts
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* ── Hero image (full-bleed with overlay) ───────────────────── */
+  .post-hero-wrap {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #000000;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .post-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.75;
+  }
+
+  .post-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 20%,
+      rgba(0, 0, 0, 0.35) 55%,
+      rgba(0, 0, 0, 0.78) 100%
+    );
+    pointer-events: none;
+  }
+
+  .post-hero-dots {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  .post-hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  .post-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #949494;
+    background: #F4F4F4;
+    border: 1px solid #F4F4F4;
+  }
+
+  .post-tag--light {
+    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* ── Prose: markdown body styling ──────────────────────────────── */
+  .prose {
+    font-family: var(--font-family-display);
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #2F2F2F;
+  }
+
+  .prose :global(h2) {
+    font-family: var(--font-family-display);
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #000000;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .prose :global(h3) {
+    font-family: var(--font-family-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #000000;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .prose :global(p) {
+    margin-bottom: 1.25rem;
+  }
+
+  .prose :global(strong) {
+    font-weight: 700;
+    color: #000000;
+  }
+
+  .prose :global(em) {
+    font-style: italic;
+  }
+
+  .prose :global(ul) {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .prose :global(ul li) {
+    padding-left: 1.25rem;
+    position: relative;
+    color: #2F2F2F;
+  }
+
+  .prose :global(ul li::before) {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #949494;
+    font-weight: 600;
+  }
+
+  .prose :global(ol) {
+    list-style: decimal;
+    padding-left: 1.5rem;
+    margin: 0 0 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .prose :global(blockquote) {
+    border-left: 3px solid #F4F4F4;
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: #949494;
+    font-style: italic;
+  }
+
+  .prose :global(a) {
+    color: #000000;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+
+  .prose :global(a:hover) {
+    color: #2F2F2F;
+  }
+
+  .prose :global(code) {
+    font-family: monospace;
+    font-size: 0.85em;
+    background: #F4F4F4;
+    border: 1px solid #F4F4F4;
+    padding: 0.1em 0.4em;
+    color: #000000;
+  }
+
+  .prose :global(pre) {
+    background: #000000;
+    color: #F4F4F4;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .prose :global(pre code) {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.85rem;
+  }
+
+  .prose :global(hr) {
+    border: none;
+    border-top: 1px solid #F4F4F4;
+    margin: 2rem 0;
+  }
+</style>

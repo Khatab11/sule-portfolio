@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* ─── Design System Tokens — Black · White · Blue ────────────────────────── */
+@theme {
+  /* Blues */
+  --color-blue-950:  #000000;
+  --color-blue-900:  #000000;
+  --color-blue-800:  #000000;
+  --color-blue-700:  #000000;
+  --color-blue-600:  #2F2F2F;
+  --color-blue-500:  #000000;
+  --color-blue-400:  #949494;
+  --color-blue-300:  #949494;
+  --color-blue-200:  #F4F4F4;
+  --color-blue-100:  #F4F4F4;
+  --color-blue-50:   #F4F4F4;
+
+  /* Neutrals — cool-tinted (blue-gray) */
+  --color-ink:       #000000;   /* near-black */
+  --color-ink-2:     #2F2F2F;
+  --color-ink-3:     #2F2F2F;
+  --color-muted:     #949494;
+  --color-subtle:    #949494;
+  --color-border:    #F4F4F4;
+  --color-surface:   #F4F4F4;
+  --color-white:     #FFFFFF;
+
+  /* Semantic aliases */
+  --color-primary:   var(--color-blue-500);
+
+  /* Typography */
+  --font-family-sans:    "Quicksand", ui-sans-serif, system-ui, sans-serif;
+  --font-family-display: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono:    "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-family-sans);
+  font-weight: 600;
+  color: #000000;
+  background-color: #FFFFFF;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-display);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 3px;
+  border-radius: 0;
+}
