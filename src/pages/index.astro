@@ -13,32 +13,14 @@ function formatDate(date: Date) {
   return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
-const focusAreas = [
-  {
-    title: 'Sofalizing',
-    desc: 'Interacting with others online from the comfort of home rather than meeting face-to-face — a post-pandemic behavioral shift among emerging adults.',
-    img: '/images/track-sofalizing.png',
-    pubLink: '/publications#sofalizing',
-  },
-  {
-    title: 'Sharenting',
-    desc: 'Parents publicly sharing information and images of their children on social media — exploring the privacy risks and psychological drivers behind the behaviour.',
-    img: '/images/Parent and Child Image.png',
-    pubLink: '/publications#sharenting',
-  },
-  {
-    title: 'Phubbing',
-    desc: 'Ignoring in-person conversation by focusing on a mobile phone — examining its structural determinants and its impact on interpersonal relationships.',
-    img: '/images/track-phubbing.png',
-    pubLink: '/publications#phubbing',
-  },
-  {
-    title: 'Social Media Addiction',
-    desc: 'Problematic social media use linked to dark triad traits, Big Five personality, cyberbullying perpetration, and mental health outcomes in university students.',
-    img: '/images/track-social-media-addiction.png',
-    pubLink: '/publications#social-media-addiction',
-  },
-];
+const focusAreas = (await getCollection('researchTracks'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(t => ({
+    title: t.data.title,
+    desc: t.data.desc ?? t.data.definition,
+    img: t.data.img,
+    pubLink: t.data.pubLink ?? '/publications',
+  }));
 ---
 
 <Layout

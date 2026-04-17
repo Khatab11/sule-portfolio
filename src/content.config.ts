@@ -94,6 +94,8 @@ const awards = defineCollection({
     issuer: z.string().optional(),
     year: z.string().optional(),
     type: z.enum(['university', 'tubitak', 'fellowship']),
+    desc: z.string().optional(),
+    image: z.string().optional(),
     order: z.number().default(0),
   }),
 });
