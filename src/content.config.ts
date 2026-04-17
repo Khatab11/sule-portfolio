@@ -30,6 +30,9 @@ const publications = defineCollection({
       .optional(),
     featured: z.boolean().default(false),
     order: z.number().default(0),
+    ref: z.string().optional(),
+    detail: z.string().optional(),
+    cvSection: z.enum(['none', 'digital', 'edtech', 'book']).default('none'),
   }),
 });
 
@@ -154,8 +157,21 @@ const siteSettings = defineCollection({
     bio: z.string(),
     heroImage: z.string().optional(),
     email: z.string().optional(),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+    officeLocation: z.string().optional(),
     institution: z.string().optional(),
     footerText: z.string().optional(),
+    footerTagline: z.string().optional(),
+    heroGreeting: z.string().optional(),
+    heroSubtitle: z.string().optional(),
+    welcomeMessage: z.string().optional(),
+    cvHeroImage: z.string().optional(),
+    contactHeroImage: z.string().optional(),
+    publicationsHeroImage: z.string().optional(),
+    hIndex: z.string().optional(),
+    citations: z.string().optional(),
+    publicationCount: z.string().optional(),
   }),
 });
 

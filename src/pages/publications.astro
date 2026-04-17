@@ -2,137 +2,70 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import { getCollection, getEntry } from 'astro:content';
 
-const tracks = [
-  {
-    id: 'sofalizing',
-    title: 'Sofalizing',
-    definition: 'Interacting with others online from the comfort of one\'s home rather than going out and meeting face-to-face.',
-    img: '/images/track-sofalizing.png',
-    color: { badge: 'bg-white text-[#000000] border border-[#F4F4F4]', border: 'border-l-[#000000]', dot: 'bg-[#000000]' },
-    articles: [
-      { title: 'Exploring the link between the big five traits and sofalizing behavior among Filipino young adults', journal: 'Current Psychology', year: '2026', desc: 'Examines how openness, conscientiousness, extraversion, agreeableness, and neuroticism predict sofalizing tendencies in a Filipino emerging-adult sample.' },
-      { title: 'Exploring the Presence of Sofalizing Behavior Among Filipinos: A Mixed Method Inquiry', journal: 'Psychological Studies', year: '2025', desc: 'A mixed-methods study combining survey data and qualitative interviews to document sofalizing prevalence and motivations among Filipino young adults.' },
-      { title: 'Sofalizing and its relationship with social media addiction and psychosocial factors: A new phenomenon among emerging adults', journal: 'Social Science Journal', year: '2024', desc: 'Introduces sofalizing as a measurable construct and maps its associations with social media addiction, loneliness, and life satisfaction.' },
-      { title: 'Social anxiety and social media addiction among emerging adults: The mediating role of \'sofalising\'', journal: 'International Journal of Düzce Educational Sciences', year: '2023', desc: 'Tests a mediation model in which sofalizing transmits the effect of social anxiety on problematic social media use in university students.' },
-    ],
-  },
-  {
-    id: 'sharenting',
-    title: 'Sharenting',
-    definition: 'The practice of parents publicly sharing information about their children on social media.',
-    img: '/images/Parent and Child Image.png',
-    color: { badge: 'bg-white text-[#000000] border border-[#F4F4F4]', border: 'border-l-[#000000]', dot: 'bg-[#000000]' },
-    articles: [
-      { title: 'Sharenting: A systematic review of the empirical literature', journal: 'Journal of Family Theory & Review', year: '2024', note: 'Co-authored with Mark D. Griffiths', desc: 'A comprehensive systematic review synthesising existing empirical evidence on sharenting — its prevalence, motivations, risks to children\'s privacy, and psychological drivers in parents.' },
-    ],
-  },
-  {
-    id: 'phubbing',
-    title: 'Phubbing',
-    definition: 'Dealing with a mobile phone and escaping interpersonal communication while engaged in a face-to-face conversation.',
-    img: '/images/track-phubbing.png',
-    color: { badge: 'bg-white text-[#000000] border border-[#F4F4F4]', border: 'border-l-[#000000]', dot: 'bg-[#000000]' },
-    articles: [
-      { title: 'The Virtual World\'s Current Addiction: Phubbing', journal: 'Addicta — The Turkish Journal on Addictions', year: '2016', desc: 'Conceptualises phubbing as a convergence of multiple virtual addictions and situates it within the broader landscape of problematic technology use.' },
-      { title: 'Determinants of phubbing, which is the sum of many virtual addictions: A structural equation model', journal: 'Journal of Behavioral Addictions', year: '2015', desc: 'Uses structural equation modelling to identify the key predictors of phubbing behaviour, including smartphone addiction, internet addiction, and fear of missing out.' },
-    ],
-  },
-  {
-    id: 'social-media-addiction',
-    title: 'Social Media Addiction',
-    definition: 'Problematic and compulsive use of social media platforms, linked to personality traits, mental health outcomes, and behavioral patterns.',
-    img: '/images/track-social-media-addiction.png',
-    color: { badge: 'bg-white text-[#000000] border border-[#F4F4F4]', border: 'border-l-[#000000]', dot: 'bg-[#000000]' },
-    articles: [
-      { title: 'Childhood Emotional Abuse and Cyberbullying Perpetration: The Role of Dark Personality Traits', journal: 'Journal of Interpersonal Violence', year: '2021', desc: 'Investigates how dark triad traits (narcissism, Machiavellianism, psychopathy) mediate the path from childhood emotional abuse to cyberbullying perpetration in university students.' },
-      { title: 'Uses and Gratifications of Problematic Social Media Use Among University Students: a Simultaneous Examination of the Big Five of Personality Traits, Social Media Platforms, and Social Media Use Motives', journal: 'International Journal of Mental Health and Addiction', year: '2020', desc: 'Applies uses-and-gratifications theory to explain how Big Five personality traits interact with platform choice and usage motives to predict problematic social media use.' },
-      { title: 'The Mediating Role of Self/Everyday Creativity and Depression on the Relationship Between Creative Personality Traits and Problematic Social Media Use Among Emerging Adults', journal: 'International Journal of Mental Health and Addiction', year: '2020', desc: 'Tests a serial mediation model in which creativity and depressive symptoms sequentially link creative personality traits to addictive social media behaviour.' },
-      { title: 'Analyzing the Links Between Problematic Social Media Use, Dark Triad Traits, and Self-esteem', journal: 'International Journal of Mental Health and Addiction', year: '2019', desc: 'Reveals that narcissism and psychopathy positively predict problematic social media use while self-esteem serves as a buffering factor in a university student sample.' },
-    ],
-  },
+const settings = (await getEntry('siteSettings', 'settings'))?.data;
+const heroImage = settings?.publicationsHeroImage ?? '/images/all in one room publication.png';
+
+// Research tracks from collection
+const tracks = (await getCollection('researchTracks'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(t => ({
+    id: t.id,
+    title: t.data.title,
+    definition: t.data.definition,
+    img: t.data.img,
+  }));
+
+// All publications
+const allPubs = (await getCollection('publications'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+// Group articles per track (ordered by year desc then order)
+const trackSections = tracks.map(t => ({
+  ...t,
+  articles: allPubs
+    .filter(p => p.data.trackId === t.id)
+    .sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0) || (a.data.order ?? 0) - (b.data.order ?? 0))
+    .map(p => ({
+      title: p.data.title,
+      journal: p.data.journal,
+      year: String(p.data.year),
+      note: p.data.note ?? null,
+      desc: p.data.desc ?? null,
+    })),
+})).filter(t => t.articles.length > 0);
+
+// Year groups
+const yearBuckets: Array<{ label: string; id: string; min: number; max: number }> = [
+  { label: '2024 – 2026', id: 'y2024', min: 2024, max: 2100 },
+  { label: '2020 – 2023', id: 'y2020', min: 2020, max: 2023 },
+  { label: '2018 – 2019', id: 'y2018', min: 2018, max: 2019 },
+  { label: '2015 – 2017', id: 'y2015', min: 2015, max: 2017 },
 ];
 
-// ── Full publication list ────────────────────────────────────────────────────
-interface Pub {
-  title: string;
-  journal: string;
-  year: string;
-  doi?: string;
-  note?: string;
-  isBook?: boolean;
-}
+const yearGroups = yearBuckets.map(b => ({
+  label: b.label,
+  id: b.id,
+  pubs: allPubs
+    .filter(p => (p.data.year ?? 0) >= b.min && (p.data.year ?? 0) <= b.max)
+    .sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0))
+    .map(p => ({
+      title: p.data.title,
+      journal: p.data.journal,
+      year: String(p.data.year),
+      doi: p.data.doi ?? null,
+      note: p.data.note ?? null,
+      isBook: p.data.isBook ?? false,
+    })),
+})).filter(g => g.pubs.length > 0);
 
-const yearGroups: { label: string; id: string; pubs: Pub[] }[] = [
-  {
-    label: '2024 – 2026',
-    id: 'y2024',
-    pubs: [
-      { title: 'Exploring the link between the big five traits and sofalizing behavior among Filipino young adults', journal: 'Current Psychology', year: '2026' },
-      { title: 'Exploring the Presence of Sofalizing Behavior Among Filipinos: A Mixed Method Inquiry', journal: 'Psychological Studies', year: '2025' },
-      { title: 'Sharenting: A systematic review of the empirical literature', journal: 'Journal of Family Theory & Review', year: '2024', note: 'With Mark D. Griffiths' },
-      { title: 'Sofalizing and its relationship with social media addiction and psychosocial factors: A new phenomenon among emerging adults', journal: 'Social Science Journal', year: '2024' },
-    ],
-  },
-  {
-    label: '2020 – 2023',
-    id: 'y2020',
-    pubs: [
-      { title: 'Social anxiety and social media addiction among emerging adults: The mediating role of \'sofalising\'', journal: 'International Journal of Düzce Educational Sciences', year: '2023' },
-      { title: 'Teacher performance in terms of technopedagogical content knowledge competencies', journal: 'Kastamonu Eğitim Dergisi', year: '2021', doi: 'https://doi.org/10.24106/kefdergi.726886' },
-      { title: 'Childhood Emotional Abuse and Cyberbullying Perpetration: The Role of Dark Personality Traits', journal: 'Journal of Interpersonal Violence', year: '2021' },
-      { title: 'A new model for the factors that affect interactive whiteboard usage of teachers and its effect on performance', journal: 'Education and Information Technologies', year: '2021' },
-      { title: 'Compensatory Usage of the Internet: The Case of Mukbang Watching on YouTube', journal: 'Psychiatry Investigation', year: '2021' },
-      { title: 'Transition from blackboard to interactive whiteboard: Examining teachers\' interactive whiteboard acceptance and use', journal: 'Elektronik Sosyal Bilimler Dergisi', year: '2020', doi: 'https://doi.org/10.17755/esosder.725694' },
-      { title: 'Coğrafya Öğretiminde Öğretim Yöntemlerinin Öğrenci Başarısına Etkisi', journal: 'International Journal of Geography and Geography Education', year: '2020', doi: 'https://doi.org/10.32003/igge.673651' },
-      { title: 'Kodlama Eğitiminde İşbirlikli Öğrenme Yaklaşımı: Eşli Kodlama', journal: 'OPUS Uluslararası Toplum Araştırmaları Dergisi', year: '2020', doi: 'https://doi.org/10.26466/opus.680327' },
-      { title: 'Öğretmenlik Mesleği Genel Yeterliklerinin İncelenmesi', journal: 'Academy Journal of Educational Sciences', year: '2020', doi: 'https://doi.org/10.31805/acjes.746234' },
-      { title: 'Sosyal bilimlerde araştırma yöntemleri dersinin öğretim üyelerinin görüşlerine göre incelenmesi', journal: 'International Journal of Social Inquiry', year: '2020', doi: 'https://doi.org/10.37093/ijsi.746491' },
-      { title: 'Trait Emotional Intelligence and Internet Gaming Disorder Among Gamers', journal: 'International Journal of Mental Health and Addiction', year: '2020' },
-      { title: 'Diffusion of responsibility in group work: Social loafing', journal: 'Journal of Pedagogical Research', year: '2020' },
-      { title: 'Uses and Gratifications of Problematic Social Media Use Among University Students: a Simultaneous Examination of the Big Five of Personality Traits, Social Media Platforms, and Social Media Use Motives', journal: 'International Journal of Mental Health and Addiction', year: '2020' },
-      { title: 'Metaphoric perceptions of academicians and graduate students about the concepts of curriculum and curriculum evaluation', journal: 'International Journal of Curriculum and Instructional Studies', year: '2020' },
-      { title: 'The Mediating Role of Self/Everyday Creativity and Depression on the Relationship Between Creative Personality Traits and Problematic Social Media Use Among Emerging Adults', journal: 'International Journal of Mental Health and Addiction', year: '2020' },
-      { title: 'Adolescents\' eveningness chronotype and cyberbullying perpetration', journal: 'Biological Rhythm Research', year: '2020' },
-      { title: 'Fen Öğretim Programları', journal: 'Book', year: '2020', isBook: true },
-    ],
-  },
-  {
-    label: '2018 – 2019',
-    id: 'y2018',
-    pubs: [
-      { title: 'A Holistic View to Barriers to Technology Integration in Education', journal: 'Turkish Online Journal of Qualitative Inquiry', year: '2019', doi: 'https://doi.org/10.17569/tojqi.613969' },
-      { title: 'Yeniliklerin yayılması teorisi bağlamında öğretmen adaylarının bulut teknolojisi kullanımlarını etkileyen faktörler', journal: 'Eskişehir Osmangazi Üniversitesi Sosyal Bilimler Dergisi', year: '2019', doi: 'https://doi.org/10.17494/ogusbd.555091' },
-      { title: 'Analyzing the Links Between Problematic Social Media Use, Dark Triad Traits, and Self-esteem', journal: 'International Journal of Mental Health and Addiction', year: '2019' },
-      { title: 'Dark personality traits and problematic smartphone use: The mediating role of fearful attachment', journal: 'Personality and Individual Differences', year: '2019' },
-      { title: 'Eğitim ve Öğretim Teknolojileri Konusunda Yapılan Tezlerin İncelenmesi (2013–2018)', journal: 'Yükseköğretim ve Bilim Dergisi', year: '2019' },
-      { title: 'Üstün Yetenekli/Zekalı Öğrencilerin Eğitiminde Teknolojinin Yeri', journal: 'Elektronik Eğitim Bilimleri Dergisi', year: '2018' },
-      { title: 'Cyberbullying perpetration among undergraduates: evidence of the roles of chronotype and sleep quality', journal: 'Biological Rhythm Research', year: '2018' },
-    ],
-  },
-  {
-    label: '2015 – 2017',
-    id: 'y2015',
-    pubs: [
-      { title: 'TEKNOLOJİ KABUL MODELİ ÇERÇEVESİNDE ÖĞRETMEN ADAYLARININ MOBİL TEKNOLOJİLERE YÖNELİK GÖRÜŞLERİNİN İNCELENMESİ', journal: 'Asian Journal of Instruction (E-AJI)', year: '2017' },
-      { title: 'Öğretim Teknolojileri Ve Materyal Tasarimi Dersinin Teknoloji Entegrasyonuna Katkisi Açisindan Değerlendirilmesi', journal: 'Anadolu Eğitim Liderliği ve Öğretim Dergisi', year: '2017' },
-      { title: 'The citation analyses of scientific publications in the field of educational sciences and teacher education in Turkey', journal: 'Bilgi Dünyası', year: '2017' },
-      { title: 'Comparison of Turkey and United States in terms of teacher performance indicators', journal: 'Journal of Pedagogical Research', year: '2017' },
-      { title: 'Map of Scientific Publication in the field of Educational Sciences and Teacher Education in Turkey: A Bibliometric Study', journal: 'Educational Sciences — Theory & Practice', year: '2016' },
-      { title: 'Scientific Publication Map of Journals Published in the Field of Educational Sciences in Turkey: An Analysis Impact Factors of Journals', journal: 'Kuram ve Uygulamada Eğitim Yönetimi', year: '2016' },
-      { title: 'Testing the mediating role of self-efficacy on the predictive effect of self-esteem on mathematics teachers professional motivation', journal: 'Studies in Psychology (Psikoloji Çalışmaları)', year: '2016' },
-      { title: 'Teknoloji destekli eğitim ortamlarında iletişim: Bir sınıf etkileşim analizi çalışması', journal: 'Eğitim ve Öğretim Araştırmaları Dergisi', year: '2016' },
-      { title: 'The Virtual World\'s Current Addiction: Phubbing', journal: 'Addicta — The Turkish Journal on Addictions', year: '2016' },
-      { title: 'Determinants of phubbing, which is the sum of many virtual addictions: A structural equation model', journal: 'Journal of Behavioral Addictions', year: '2015' },
-      { title: 'The factors affecting acceptance and use of interactive whiteboard within the scope of FATIH project: A structural equation model based on the Unified Theory of acceptance and use of technology', journal: 'Computers & Education', year: '2015' },
-      { title: 'The Effect of Leadership on Organizational Performance', journal: 'Leadership and Organizational Outcomes', year: '2015' },
-      { title: 'The Effect of Leadership on Organizational Learning', journal: 'Leadership and Organizational Outcomes', year: '2015' },
-      { title: 'The Effect of Leadership on Organizational Health', journal: 'Leadership and Organizational Outcomes', year: '2015' },
-    ],
-  },
-];
-
-const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
+const totalPubs = allPubs.length;
+const yearsSpan = (() => {
+  const years = allPubs.map(p => p.data.year ?? 0).filter(y => y > 0);
+  if (!years.length) return '';
+  return `${Math.min(...years)}–${Math.max(...years)}`;
+})();
 ---
 
 <Layout
@@ -143,21 +76,16 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
 
   <main id="main-content">
 
-    <!-- ─── Hero ─────────────────────────────────────────────────────────── -->
     <section aria-labelledby="pub-hero-heading">
-
-      <!-- Photo — full width, no overlay -->
       <div class="pub-hero-img-wrap">
         <img
-          src="/images/all in one room publication.png"
+          src={heroImage}
           alt="Publications — Doç. Dr. Şule Betül Tosuntaş"
           class="pub-hero-img"
         />
-        <!-- Subtle dot grid on the photo -->
         <div class="pub-hero-dots" aria-hidden="true"></div>
       </div>
 
-      <!-- Text below the photo -->
       <div class="bg-white border-b border-[#F4F4F4]">
         <div class="max-w-6xl mx-auto px-6 py-12 sm:py-16">
 
@@ -173,7 +101,6 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
             <strong class="text-[#000000]">{totalPubs} works</strong> listed below.
           </p>
 
-          <!-- Stats row -->
           <div class="pub-hero-stats">
             <div class="pub-hero-stat">
               <span class="pub-hero-stat-num">{totalPubs}</span>
@@ -181,17 +108,16 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
             </div>
             <div class="pub-hero-stat-divider" aria-hidden="true"></div>
             <div class="pub-hero-stat">
-              <span class="pub-hero-stat-num">4</span>
+              <span class="pub-hero-stat-num">{tracks.length}</span>
               <span class="pub-hero-stat-label">Research Tracks</span>
             </div>
             <div class="pub-hero-stat-divider" aria-hidden="true"></div>
             <div class="pub-hero-stat">
-              <span class="pub-hero-stat-num">2015–2026</span>
+              <span class="pub-hero-stat-num">{yearsSpan}</span>
               <span class="pub-hero-stat-label">Publication Years</span>
             </div>
           </div>
 
-          <!-- Access links -->
           <div class="pub-hero-links">
             <a href="https://avesis.uludag.edu.tr/sbtosuntas" target="_blank" rel="noopener noreferrer" class="pub-hero-link-primary">
               AVESİS Portal ↗
@@ -205,12 +131,11 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
       </div>
     </section>
 
-    <!-- ─── Sticky nav: tracks + year groups ─────────────────────────────── -->
     <div class="bg-white border-b border-[#F4F4F4] sticky top-16 z-40 overflow-x-auto">
       <div class="max-w-6xl mx-auto px-6">
         <nav aria-label="Publication sections" id="pub-nav" class="flex gap-1 py-3 whitespace-nowrap">
           <span class="px-3 py-2 text-xs font-semibold text-[#949494] uppercase tracking-widest">Tracks:</span>
-          {tracks.map(({ id, title }) => (
+          {trackSections.map(({ id, title }) => (
             <a
               href={`#${id}`}
               data-section={id}
@@ -234,7 +159,6 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
       </div>
     </div>
 
-    <!-- ─── Featured research tracks ─────────────────────────────────────── -->
     <div class="max-w-6xl mx-auto px-6 pt-10 pb-12">
 
       <div class="mb-4">
@@ -243,23 +167,16 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
       </div>
 
       <div class="space-y-8">
-      {tracks.map(({ id, title, definition, color, img, articles }) => (
+      {trackSections.map(({ id, title, definition, img, articles }) => (
         <section id={id} aria-labelledby={`${id}-heading`} class="scroll-mt-32 border border-[#F4F4F4]">
 
-          <!-- Photo + overlay -->
           <div class="relative">
             <img src={img} alt={title} class="w-full block" />
-
-            <!-- Dark gradient -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-
-            <!-- Grid overlay — diagonal dot pattern -->
             <div
               class="absolute inset-0 opacity-30"
               style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"
             ></div>
-
-            <!-- Text on top -->
             <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
               <span class="inline-block px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white border border-white/40 mb-3">
                 Research Track
@@ -294,10 +211,8 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
       </div>
     </div>
 
-    <!-- ─── Divider ────────────────────────────────────────────────────────── -->
     <div class="border-t-8 border-[#F4F4F4]"></div>
 
-    <!-- ─── Full publications by year ─────────────────────────────────────── -->
     <div class="max-w-6xl mx-auto px-6 py-16">
       <div class="mb-12">
         <h2 class="font-display font-700 text-2xl text-[#000000] mb-2">Complete Publications List</h2>
@@ -311,19 +226,16 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
         {yearGroups.map(({ label, id, pubs }) => (
           <section id={id} aria-labelledby={`${id}-heading`} class="scroll-mt-32">
 
-            <!-- Year group header -->
             <div class="flex items-center gap-4 mb-6">
               <h3 id={`${id}-heading`} class="font-display font-700 text-xl text-[#000000] shrink-0">{label}</h3>
               <div class="flex-1 h-px bg-[#F4F4F4]"></div>
               <span class="shrink-0 text-xs font-semibold text-[#949494] tabular-nums">{pubs.length} works</span>
             </div>
 
-            <!-- Publication rows -->
             <ol class="list-none p-0 divide-y divide-[#F4F4F4]">
               {pubs.map(({ title, journal, year, doi, note, isBook }) => (
                 <li class="group grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_auto_72px] items-center gap-x-6 gap-y-0.5 py-4 hover:bg-[#F4F4F4] px-3 -mx-3">
 
-                  <!-- Title + badges -->
                   <div class="flex flex-wrap items-start sm:items-center gap-x-3 gap-y-1 min-w-0">
                     <span class={`text-sm leading-snug ${isBook ? 'italic text-[#2F2F2F]' : 'text-[#000000]'} font-500`}>
                       {title}
@@ -336,7 +248,6 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
                     )}
                   </div>
 
-                  <!-- DOI link OR journal (sm+) -->
                   <div class="hidden sm:flex items-center gap-4">
                     <span class="text-xs text-[#949494] italic max-w-[260px] truncate">{journal}</span>
                     {doi ? (
@@ -365,10 +276,8 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
                     )}
                   </div>
 
-                  <!-- Year -->
                   <span class="text-sm tabular-nums text-right text-[#949494] shrink-0">{year}</span>
 
-                  <!-- Mobile: journal below -->
                   <div class="sm:hidden col-span-2 flex items-center gap-3 -mt-0.5">
                     <span class="text-xs text-[#949494] italic">{journal}</span>
                     {doi && (
@@ -383,7 +292,6 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
       </div>
     </div>
 
-    <!-- ─── Footer CTA ─────────────────────────────────────────────────────── -->
     <div class="bg-[#F4F4F4] border-t border-[#F4F4F4] py-12">
       <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
@@ -414,134 +322,22 @@ const totalPubs = yearGroups.reduce((s, g) => s + g.pubs.length, 0);
 </Layout>
 
 <style>
-  .pub-nav-link.active {
-    color: #000000;
-    font-weight: 800;
-  }
-
-  /* ── Hero photo ─────────────────────────────────────────────────── */
-  .pub-hero-img-wrap {
-    position: relative;
-    width: 100%;
-    line-height: 0;
-  }
-
-  .pub-hero-img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .pub-hero-dots {
-    position: absolute;
-    inset: 0;
-    opacity: 0.25;
-    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
-    background-size: 24px 24px;
-    pointer-events: none;
-  }
-
-  /* ── Hero text (below photo) ─────────────────────────────────────── */
-  .pub-hero-title {
-    font-family: var(--font-family-display);
-    font-weight: 800;
-    font-size: clamp(2rem, 5vw, 3.75rem);
-    color: #000000;
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    margin: 0 0 1rem 0;
-    text-transform: uppercase;
-  }
-
-  .pub-hero-desc {
-    font-size: 0.95rem;
-    color: #949494;
-    line-height: 1.65;
-    max-width: 52ch;
-    margin: 0 0 2rem 0;
-  }
-
-  /* Stats row */
-  .pub-hero-stats {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .pub-hero-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  .pub-hero-stat-num {
-    font-family: var(--font-family-display);
-    font-weight: 800;
-    font-size: 1.5rem;
-    color: #000000;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-
-  .pub-hero-stat-label {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #949494;
-  }
-
-  .pub-hero-stat-divider {
-    width: 1px;
-    height: 2rem;
-    background: #F4F4F4;
-    flex-shrink: 0;
-  }
-
-  /* Links */
-  .pub-hero-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .pub-hero-link-primary {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.6rem 1.25rem;
-    background: #000000;
-    color: #ffffff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    transition: background 0.15s ease;
-  }
-
-  .pub-hero-link-primary:hover {
-    background: #2F2F2F;
-  }
-
-  .pub-hero-link-ghost {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.6rem 1.25rem;
-    background: transparent;
-    color: #2F2F2F;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    border: 1px solid #F4F4F4;
-    transition: border-color 0.15s ease, color 0.15s ease;
-  }
-
-  .pub-hero-link-ghost:hover {
-    border-color: #000000;
-    color: #000000;
-  }
+  .pub-nav-link.active { color: #000000; font-weight: 800; }
+  .pub-hero-img-wrap { position: relative; width: 100%; line-height: 0; }
+  .pub-hero-img { width: 100%; height: auto; display: block; }
+  .pub-hero-dots { position: absolute; inset: 0; opacity: 0.25; background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; }
+  .pub-hero-title { font-family: var(--font-family-display); font-weight: 800; font-size: clamp(2rem, 5vw, 3.75rem); color: #000000; line-height: 1.05; letter-spacing: -0.01em; margin: 0 0 1rem 0; text-transform: uppercase; }
+  .pub-hero-desc { font-size: 0.95rem; color: #949494; line-height: 1.65; max-width: 52ch; margin: 0 0 2rem 0; }
+  .pub-hero-stats { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .pub-hero-stat { display: flex; flex-direction: column; gap: 0.2rem; }
+  .pub-hero-stat-num { font-family: var(--font-family-display); font-weight: 800; font-size: 1.5rem; color: #000000; line-height: 1; letter-spacing: -0.02em; }
+  .pub-hero-stat-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #949494; }
+  .pub-hero-stat-divider { width: 1px; height: 2rem; background: #F4F4F4; flex-shrink: 0; }
+  .pub-hero-links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .pub-hero-link-primary { display: inline-flex; align-items: center; padding: 0.6rem 1.25rem; background: #000000; color: #ffffff; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-decoration: none; transition: background 0.15s ease; }
+  .pub-hero-link-primary:hover { background: #2F2F2F; }
+  .pub-hero-link-ghost { display: inline-flex; align-items: center; padding: 0.6rem 1.25rem; background: transparent; color: #2F2F2F; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none; border: 1px solid #F4F4F4; transition: border-color 0.15s ease, color 0.15s ease; }
+  .pub-hero-link-ghost:hover { border-color: #000000; color: #000000; }
 </style>
 
 <script>

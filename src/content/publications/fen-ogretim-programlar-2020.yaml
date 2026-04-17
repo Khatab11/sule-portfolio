@@ -3,3 +3,5 @@ journal: "Book"
 year: 2020
 isBook: true
 order: 23
+ref: "Anagün, S. S., Karademir, E., Çubukçu, Z., Tosuntaş, Ş. B., & Kartal, M. S. (2020)."
+cvSection: "book"

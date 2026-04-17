@@ -1,5 +1,18 @@
 ---
+import { getCollection, getEntry } from 'astro:content';
+
 const year = new Date().getFullYear();
+
+const settings = (await getEntry('siteSettings', 'settings'))?.data;
+const tagline = settings?.footerTagline ?? 'Bursa Uludağ Üniversitesi · Eğitim Fakültesi';
+const footerText = settings?.footerText?.replace('{year}', String(year)) ??
+  `© ${year} ${settings?.name ?? 'Şule Betül Tosuntaş'}`;
+const siteName = settings?.name ?? 'Doç. Dr. Şule Betül Tosuntaş';
+
+const navEntries = await getCollection('navLinks');
+const navItems = navEntries
+  .map((e) => ({ label: e.data.label, href: e.data.href, order: e.data.order }))
+  .sort((a, b) => a.order - b.order);
 ---
 
 <footer class="bg-[#000000] text-[#949494]" role="contentinfo">
@@ -10,31 +23,31 @@ const year = new Date().getFullYear();
         <a href="/" aria-label="Home" class="inline-flex items-center mb-1">
           <img
             src="/images/logo.svg"
-            alt="Doç. Dr. Şule Betül Tosuntaş"
+            alt={siteName}
             width="160"
             height="48"
             class="h-9 w-auto object-contain brightness-0 invert"
           />
         </a>
-        <p class="text-xs">Bursa Uludağ Üniversitesi · Eğitim Fakültesi</p>
+        <p class="text-xs">{tagline}</p>
       </div>
 
       <nav aria-label="Footer navigation">
         <ul class="flex flex-wrap justify-center gap-6 list-none p-0 m-0">
-          {['Home', 'CV', 'Publications', 'Contact'].map(item => (
+          {navItems.map(({ label, href }) => (
             <li>
               <a
-                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                href={href}
                 class="text-sm hover:text-white transition-colors duration-200"
               >
-                {item}
+                {label}
               </a>
             </li>
           ))}
         </ul>
       </nav>
 
-      <p class="text-xs">&copy; {year} Şule Betül Tosuntaş</p>
+      <p class="text-xs">{footerText}</p>
     </div>
   </div>
 </footer>

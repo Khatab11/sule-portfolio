@@ -2,7 +2,18 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+
+const settings = (await getEntry('siteSettings', 'settings'))?.data;
+const cvHeroImage = settings?.cvHeroImage ?? '/images/cv-hero.png';
+const siteName = settings?.name ?? 'Doç. Dr. Şule Betül Tosuntaş';
+const siteTitle = settings?.title ?? 'Associate Professor · Department of Educational Sciences · Bursa Uludağ Üniversitesi';
+const email = settings?.email ?? 'sbtosuntas@uludag.edu.tr';
+const phone = settings?.phone ?? '+90 224 275 5031';
+const address = settings?.address ?? 'Eğitim Fakültesi B Blok, Eğitim Bilimleri Bölümü, Office 110. Görükle Kampüsü Nilüfer / BURSA, Turkey';
+const hIndex = settings?.hIndex ?? '22';
+const citations = settings?.citations ?? '4184';
+const publicationCount = settings?.publicationCount ?? '90+';
 
 const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) => a.data.order - b.data.order;
 
@@ -52,59 +63,18 @@ const taught = teachingAll
   .filter(t => t.data.category === 'taught')
   .map(t => t.data.title);
 
-const pubsDigital = [
-  {
-    ref: 'Tosuntaş, Ş. B., & Griffiths, M. D. (2024).',
-    title: 'Sharenting: A systematic review of the empirical literature.',
-    journal: 'Journal of Family Theory & Review',
-    detail: '16(3), 525–562.',
-  },
-  {
-    ref: 'Tosuntaş, Ş. B., Karadağ, E., Emirtekin, E., Kircaburun, K., & Griffiths, M. D. (2024).',
-    title: 'Sofalizing and its relationship with social media addiction and psychosocial factors: A new phenomenon among emerging adults.',
-    journal: 'Social Science Journal',
-    detail: '61(2), 378–390.',
-  },
-  {
-    ref: 'Kircaburun, K., Jonason, P., Griffiths, M. D., Aslanargun, E., Emirtekin, E., Tosuntaş, Ş. B., et al. (2021).',
-    title: 'Childhood Emotional Abuse and Cyberbullying Perpetration: The Role of Dark Personality Traits.',
-    journal: 'Journal of Interpersonal Violence',
-    detail: '36(21–22).',
-  },
-  {
-    ref: 'Kırcaburun, K., Alhabash, S., Tosuntaş, Ş. B., & Griffiths, M. D. (2020).',
-    title: 'Uses and Gratifications of Problematic Social Media Use Among University Students: a Simultaneous Examination of the Big Five of Personality Traits, Social Media Platforms, and Social Media Use Motives.',
-    journal: 'International Journal of Mental Health and Addiction',
-    detail: '18(3), 525–547.',
-  },
-  {
-    ref: 'Karadağ, E., Tosuntaş, Ş. B., Erzen, E., Duru, P., Bostan, N., Sahin, B. M., et al. (2015).',
-    title: 'Determinants of phubbing, which is the sum of many virtual addictions: A structural equation model.',
-    journal: 'Journal of Behavioral Addictions',
-    detail: '4(2), 60–74.',
-  },
-];
+const allPubsForCv = (await getCollection('publications'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
-const pubsEdTech = [
-  {
-    ref: 'Tosuntaş, Ş. B., Çubukçu, Z., & Beauchamp, G. (2021).',
-    title: 'A new model for the factors that affect interactive whiteboard usage of teachers and its effect on performance.',
-    journal: 'Education and Information Technologies',
-    detail: '26(3), 3575–3592.',
-  },
-  {
-    ref: 'Tosuntaş, Ş. B., Çubukçu, Z., & İnci, T. (2019).',
-    title: 'A Holistic View to Barriers to Technology Integration in Education.',
-    journal: 'Turkish Online Journal of Qualitative Inquiry',
-    detail: '10(4), 349–371.',
-  },
-  {
-    ref: 'Tosuntaş, Ş. B., Karadağ, E., & Orhan, S. (2015).',
-    title: 'The factors affecting acceptance and use of interactive whiteboard within the scope of FATIH project: A structural equation model based on the Unified Theory of acceptance and use of technology.',
-    journal: 'Computers & Education',
-    detail: '81, 169–178.',
-  },
-];
+const mapCvPub = (p: typeof allPubsForCv[number]) => ({
+  ref: p.data.ref ?? '',
+  title: p.data.title,
+  journal: p.data.journal,
+  detail: p.data.detail ?? '',
+});
+const pubsDigital = allPubsForCv.filter(p => p.data.cvSection === 'digital').map(mapCvPub);
+const pubsEdTech = allPubsForCv.filter(p => p.data.cvSection === 'edtech').map(mapCvPub);
+const pubsBook = allPubsForCv.filter(p => p.data.cvSection === 'book').map(mapCvPub);
 ---
 
 <Layout
@@ -120,8 +90,8 @@ const pubsEdTech = [
 
       <!-- Full-size photo -->
       <img
-        src="/images/cv-hero.png"
-        alt="Doç. Dr. Şule Betül Tosuntaş"
+        src={cvHeroImage}
+        alt={siteName}
         class="w-full block"
       />
 
@@ -144,19 +114,19 @@ const pubsEdTech = [
               Curriculum Vitae
             </span>
             <h1 class="font-display font-800 text-3xl sm:text-5xl text-white leading-tight mb-2">
-              Doç. Dr. Şule Betül Tosuntaş
+              {siteName}
             </h1>
             <p class="text-white/60 text-sm sm:text-base">
-              Associate Professor · Department of Educational Sciences · Bursa Uludağ Üniversitesi
+              {siteTitle}
             </p>
           </div>
 
           <!-- Stats -->
           <div class="flex items-center gap-8 shrink-0">
             {[
-              { value: '22',   label: 'H-index' },
-              { value: '4184', label: 'Citations' },
-              { value: '90+',  label: 'Publications' },
+              { value: hIndex,           label: 'H-index' },
+              { value: citations,        label: 'Citations' },
+              { value: publicationCount, label: 'Publications' },
             ].map(({ value, label }) => (
               <div class="text-center">
                 <p class="font-display font-800 text-3xl sm:text-4xl text-white">{value}</p>
@@ -212,22 +182,19 @@ const pubsEdTech = [
           <!-- Email -->
           <div class="bg-white border border-[#F4F4F4] p-5">
             <p class="text-[10px] font-semibold uppercase tracking-widest text-[#949494] mb-2">Email</p>
-            <a href="mailto:sbtosuntas@uludag.edu.tr" class="text-sm font-medium text-[#000000] hover:underline break-all">
-              sbtosuntas@uludag.edu.tr
+            <a href={`mailto:${email}`} class="text-sm font-medium text-[#000000] hover:underline break-all">
+              {email}
             </a>
           </div>
           <!-- Phone -->
           <div class="bg-white border border-[#F4F4F4] p-5">
             <p class="text-[10px] font-semibold uppercase tracking-widest text-[#949494] mb-2">Phone</p>
-            <p class="text-sm font-medium text-[#000000]">+90 224 275 5031</p>
+            <p class="text-sm font-medium text-[#000000]">{phone}</p>
           </div>
           <!-- Office -->
           <div class="bg-white border border-[#F4F4F4] p-5 sm:col-span-2">
             <p class="text-[10px] font-semibold uppercase tracking-widest text-[#949494] mb-2">Office</p>
-            <address class="not-italic text-sm text-[#2F2F2F] leading-relaxed">
-              Eğitim Fakültesi B Blok, Eğitim Bilimleri Bölümü, Office 110.<br />
-              Görükle Kampüsü Nilüfer / BURSA, Turkey
-            </address>
+            <address class="not-italic text-sm text-[#2F2F2F] leading-relaxed whitespace-pre-line">{address}</address>
           </div>
         </div>
 
@@ -549,17 +516,23 @@ const pubsEdTech = [
         </ol>
 
         <!-- Books -->
-        <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-5">Books</h3>
-        <div class="bg-white border border-[#F4F4F4] p-6 flex gap-5">
-          <span class="shrink-0 w-7 h-7 bg-[#F4F4F4] flex items-center justify-center text-[#000000] text-xs font-bold" aria-hidden="true">B</span>
-          <div>
-            <p class="text-xs text-[#949494] mb-1">Anagün, S. S., Karademir, E., Çubukçu, Z., Tosuntaş, Ş. B., &amp; Kartal, M. S. (2020).</p>
-            <p class="font-display font-600 text-sm text-[#000000]">Fen Öğretim Programları</p>
-          </div>
-        </div>
+        {pubsBook.length > 0 && (
+          <>
+            <h3 class="text-xs font-semibold uppercase tracking-widest text-[#2F2F2F] mb-5">Books</h3>
+            {pubsBook.map(({ ref, title }) => (
+              <div class="bg-white border border-[#F4F4F4] p-6 flex gap-5 mb-4">
+                <span class="shrink-0 w-7 h-7 bg-[#F4F4F4] flex items-center justify-center text-[#000000] text-xs font-bold" aria-hidden="true">B</span>
+                <div>
+                  <p class="text-xs text-[#949494] mb-1">{ref}</p>
+                  <p class="font-display font-600 text-sm text-[#000000]">{title}</p>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
 
         <p class="mt-8 text-sm text-[#949494] text-center">
-          For a complete list of 90+ publications and current research updates, visit
+          For a complete list of {publicationCount} publications and current research updates, visit
           <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" class="text-[#000000] font-medium hover:underline">Google Scholar</a>
           or
           <a href="https://www.researchgate.net" target="_blank" rel="noopener noreferrer" class="text-[#000000] font-medium hover:underline">ResearchGate</a>.

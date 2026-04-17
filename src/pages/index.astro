@@ -2,7 +2,15 @@
 import Layout  from '../layouts/Layout.astro';
 import Navbar  from '../components/Navbar.astro';
 import Footer  from '../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+
+const settings = (await getEntry('siteSettings', 'settings'))?.data;
+const heroImage = settings?.heroImage ?? '/images/sule.png';
+const heroGreeting = settings?.heroGreeting ?? "Hey, I'm Şule 👋";
+const heroSubtitle = settings?.heroSubtitle ?? 'Associate Professor of Educational Sciences at Bursa Uludağ Üniversitesi';
+const welcomeMessage = settings?.welcomeMessage ?? "Welcome to my academic portfolio.";
+const publicationCount = settings?.publicationCount ?? '90+';
+const siteName = settings?.name ?? 'Şule Betül Tosuntaş';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const latestPosts = allPosts
@@ -20,6 +28,18 @@ const focusAreas = (await getCollection('researchTracks'))
     desc: t.data.desc ?? t.data.definition,
     img: t.data.img,
     pubLink: t.data.pubLink ?? '/publications',
+  }));
+
+const featuredPubs = (await getCollection('publications'))
+  .filter(p => p.data.featured)
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+  .slice(0, 3)
+  .map(p => ({
+    title: p.data.title,
+    journal: p.data.journal,
+    year: String(p.data.year),
+    isBook: p.data.isBook ?? false,
+    trackId: p.data.trackId ?? '',
   }));
 ---
 
@@ -53,8 +73,8 @@ const focusAreas = (await getCollection('researchTracks'))
         <!-- Profile photo -->
         <div class="mb-8">
           <img
-            src="/images/sule.png"
-            alt="Şule Betül Tosuntaş"
+            src={heroImage}
+            alt={siteName}
             class="hero-avatar-photo"
           />
         </div>
@@ -64,14 +84,11 @@ const focusAreas = (await getCollection('researchTracks'))
           id="hero-heading"
           class="font-display font-700 text-4xl sm:text-5xl text-[#000000] leading-tight mb-3"
         >
-          Hey, I'm Şule 👋
+          {heroGreeting}
         </h1>
 
         <!-- Title -->
-        <p class="text-base sm:text-lg text-[#949494] mb-10 leading-relaxed">
-          Associate Professor of Educational Sciences at<br class="hidden sm:block" />
-          Bursa Uludağ Üniversitesi
-        </p>
+        <p class="text-base sm:text-lg text-[#949494] mb-10 leading-relaxed" set:html={heroSubtitle.replace(/\n/g, '<br />')}></p>
 
 
       </div>
@@ -156,7 +173,7 @@ const focusAreas = (await getCollection('researchTracks'))
           href="/publications"
           class="shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-[#000000] text-white font-semibold text-sm hover:bg-[#2F2F2F] transition-colors duration-200 min-h-[44px]"
         >
-          View all 90+ publications
+          View all {publicationCount} publications
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -165,79 +182,28 @@ const focusAreas = (await getCollection('researchTracks'))
 
       <!-- Publication list -->
       <div class="max-w-6xl mx-auto px-6 pb-20 flex flex-col divide-y divide-[#F4F4F4]">
-
-        <!-- Item 1 -->
-        <article class="pub-item group">
-          <div class="pub-index" aria-hidden="true">01</div>
-          <div class="pub-body">
-            <div class="pub-meta-row">
-              <span class="pub-type-badge pub-type-article">Journal Article</span>
-              <span class="pub-year">2024</span>
+        {featuredPubs.map(({ title, journal, year, isBook, trackId }, i) => (
+          <article class="pub-item group">
+            <div class="pub-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</div>
+            <div class="pub-body">
+              <div class="pub-meta-row">
+                <span class={`pub-type-badge ${isBook ? 'pub-type-book' : 'pub-type-article'}`}>{isBook ? 'Book' : 'Journal Article'}</span>
+                <span class="pub-year">{year}</span>
+              </div>
+              <h3 class="pub-title">{title}</h3>
+              <p class="pub-journal">{journal}</p>
             </div>
-            <h3 class="pub-title">
-              Sharenting: A systematic review of the empirical literature
-            </h3>
-            <p class="pub-journal">Journal of Family Theory &amp; Review</p>
-          </div>
-          <a
-            href="/publications#sharenting"
-            class="pub-arrow"
-            aria-label="View sharenting publication"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </article>
-
-        <!-- Item 2 -->
-        <article class="pub-item group">
-          <div class="pub-index" aria-hidden="true">02</div>
-          <div class="pub-body">
-            <div class="pub-meta-row">
-              <span class="pub-type-badge pub-type-article">Journal Article</span>
-              <span class="pub-year">2024</span>
-            </div>
-            <h3 class="pub-title">
-              Sofalizing and its relationship with social media addiction and psychosocial factors
-            </h3>
-            <p class="pub-journal">Social Science Journal</p>
-          </div>
-          <a
-            href="/publications#sofalizing"
-            class="pub-arrow"
-            aria-label="View sofalizing publication"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </article>
-
-        <!-- Item 3 — Book -->
-        <article class="pub-item group">
-          <div class="pub-index" aria-hidden="true">03</div>
-          <div class="pub-body">
-            <div class="pub-meta-row">
-              <span class="pub-type-badge pub-type-book">Book</span>
-              <span class="pub-year">2020</span>
-            </div>
-            <h3 class="pub-title">
-              Fen Öğretim Programları
-            </h3>
-            <p class="pub-journal">Co-authored book on science education curricula</p>
-          </div>
-          <a
-            href="/publications"
-            class="pub-arrow"
-            aria-label="View book publication"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </article>
-
+            <a
+              href={trackId ? `/publications#${trackId}` : '/publications'}
+              class="pub-arrow"
+              aria-label={`View publication: ${title}`}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </article>
+        ))}
       </div>
     </section>
 
@@ -685,20 +651,19 @@ const focusAreas = (await getCollection('researchTracks'))
   }
 </style>
 
-<script>
-  const message =
-    "Welcome to my academic portfolio. I'm Şule Betül Tosuntaş — an Associate Professor of Educational Sciences at Bursa Uludağ Üniversitesi. My research explores how digital technologies shape human behaviour, focusing on Social Media Addiction, Phubbing, Sofalizing, and Sharenting. I'm glad you're here.";
+<script define:vars={{ welcomeMessage }}>
+  const message = welcomeMessage;
 
-  const el = document.querySelector('.welcome-typewriter') as HTMLElement | null;
+  const el = document.querySelector('.welcome-typewriter');
   if (el) {
     let i = 0;
     const speed = 28;
     function type() {
       if (i < message.length) {
-        el!.textContent = message.slice(0, ++i);
+        el.textContent = message.slice(0, ++i);
         setTimeout(type, speed);
       } else {
-        el!.classList.add('done');
+        el.classList.add('done');
       }
     }
 
