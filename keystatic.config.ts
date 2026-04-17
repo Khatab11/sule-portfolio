@@ -4,10 +4,11 @@ export default config({
   storage:
     process.env.NODE_ENV === 'development'
       ? { kind: 'local' }
-      : {
-          kind: 'github',
-          repo: 'Khatab11/sule-portfolio',
-        },
+      : { kind: 'cloud' },
+
+  cloud: {
+    project: 'sule-website/sule-portfolio',
+  },
 
   ui: {
     brand: { name: 'Şule B. T. Portfolio' },
