@@ -1,12 +1,10 @@
 ---
-const links = [
-  { label: 'Home',         href: '/'             },
-  { label: 'CV',           href: '/cv'           },
-  { label: 'Publications', href: '/publications' },
-  { label: 'Blog',         href: '/blog'         },
-  { label: 'Contact',      href: '/contact'      },
-  { label: 'Search',       href: '/search'       },
-];
+import { getCollection } from 'astro:content';
+
+const navEntries = await getCollection('navLinks');
+const links = navEntries
+  .map((e) => ({ label: e.data.label, href: e.data.href, order: e.data.order }))
+  .sort((a, b) => a.order - b.order);
 
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 function isActive(href: string) {
