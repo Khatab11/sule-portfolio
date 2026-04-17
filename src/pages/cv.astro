@@ -19,9 +19,9 @@ const byOrder = (a: { data: { order: number } }, b: { data: { order: number } })
 
 const education = (await getCollection('education')).sort(byOrder).map(e => ({
   degree: e.data.degree,
-  institution: e.data.institution,
+  institution: e.data.institution ?? '',
   department: e.data.department ?? null,
-  period: e.data.period,
+  period: e.data.period ?? '',
   thesis: e.data.thesis ?? null,
   logo: e.data.logo ?? '',
   initials: e.data.initials ?? '',
@@ -29,8 +29,8 @@ const education = (await getCollection('education')).sort(byOrder).map(e => ({
 
 const appointments = (await getCollection('appointments')).sort(byOrder).map(a => ({
   role: a.data.role,
-  institution: a.data.institution,
-  period: a.data.period,
+  institution: a.data.institution ?? '',
+  period: a.data.period ?? '',
   current: a.data.current,
   logo: a.data.logo ?? '',
   initials: a.data.initials ?? '',

@@ -54,9 +54,9 @@ const education = defineCollection({
   loader: glob({ pattern: '**/*.{md,yaml}', base: './src/content/education' }),
   schema: z.object({
     degree: z.string(),
-    institution: z.string(),
+    institution: z.string().optional(),
     department: z.string().optional(),
-    period: z.string(),
+    period: z.string().optional(),
     thesis: z.string().optional(),
     logo: z.string().optional(),
     initials: z.string().optional(),
@@ -69,8 +69,8 @@ const appointments = defineCollection({
   loader: glob({ pattern: '**/*.{md,yaml}', base: './src/content/appointments' }),
   schema: z.object({
     role: z.string(),
-    institution: z.string(),
-    period: z.string(),
+    institution: z.string().optional(),
+    period: z.string().optional(),
     current: z.boolean().default(false),
     logo: z.string().optional(),
     initials: z.string().optional(),
